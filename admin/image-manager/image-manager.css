@@ -1,0 +1,249 @@
+/* Image Manager styles */
+
+:root {
+  --offwhite: #f7f4ef;
+  --beige: #e7dccb;
+  --brown: #8a6f55;
+  --dark-brown: #4a3b2a;
+  --green: #6fa876;
+  --red: #c84b31;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--offwhite);
+  color: var(--dark-brown);
+}
+
+#image-manager-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  border-bottom: 2px solid var(--beige);
+  padding-bottom: 20px;
+}
+
+header a {
+  color: var(--brown);
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.3s;
+}
+
+header a:hover {
+  color: var(--dark-brown);
+}
+
+header h1 {
+  font-size: 1.5rem;
+  color: var(--dark-brown);
+}
+
+h2 {
+  margin: 30px 0 20px 0;
+  font-size: 1.3rem;
+  color: var(--brown);
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  margin: 30px 0 40px 0;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  border: 2px solid var(--beige);
+  background: white;
+  color: var(--dark-brown);
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.action-btn:hover {
+  background: var(--beige);
+  border-color: var(--brown);
+}
+
+.action-btn.add { color: var(--green); border-color: var(--green); }
+.action-btn.add:hover { background: rgba(111, 168, 118, 0.1); }
+
+.action-btn.remove { color: var(--red); border-color: var(--red); }
+.action-btn.remove:hover { background: rgba(200, 75, 49, 0.1); }
+
+.action-btn.update { color: var(--brown); border-color: var(--brown); }
+.action-btn.update:hover { background: rgba(138, 111, 85, 0.1); }
+
+#workspace {
+  min-height: 300px;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin: 30px 0;
+  border: 2px dashed var(--beige);
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.image-preview {
+  position: relative;
+  border: 2px solid var(--beige);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--offwhite);
+  transition: all 0.3s;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-preview p {
+  padding: 8px;
+  font-size: 0.75rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.image-preview.selectable {
+  cursor: pointer;
+}
+
+.image-preview.selectable:hover {
+  border-color: var(--brown);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.image-preview.selectable.selected {
+  border: 3px solid var(--green);
+  box-shadow: 0 0 10px rgba(111, 168, 118, 0.3);
+}
+
+.image-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--red);
+}
+
+.remove-action,
+.update-action,
+.add-action {
+  width: 100%;
+}
+
+.add-action h3,
+.remove-action h3,
+.update-action h3 {
+  margin-bottom: 20px;
+  color: var(--dark-brown);
+  font-size: 1.1rem;
+}
+
+#file-upload,
+#replacement-file {
+  padding: 12px;
+  border: 2px dashed var(--beige);
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.confirm-section {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.confirm-btn,
+.cancel-btn {
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.confirm-btn {
+  background: var(--green);
+  color: white;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background: rgb(85, 150, 95);
+  box-shadow: 0 4px 12px rgba(111, 168, 118, 0.3);
+}
+
+.confirm-btn:disabled {
+  background: var(--beige);
+  color: var(--brown);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: var(--red);
+  border: 2px solid var(--red);
+}
+
+.cancel-btn:hover {
+  background: rgba(200, 75, 49, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #image-manager-container {
+    padding: 20px 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

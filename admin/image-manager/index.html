@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Manager - Velora Living Admin</title>
+    <link rel="stylesheet" href="image-manager.css">
+</head>
+<body>
+    <div id="image-manager-container">
+        <header>
+            <a href="../index.html">&larr; Back to Admin</a>
+            <h1>Image Manager</h1>
+        </header>
+        
+        <h2></h2>
+
+        <div class="actions">
+            <button id="add" class="action-btn add">Add Images</button>
+            <button id="remove" class="action-btn remove">Remove Images</button>
+            <button id="update" class="action-btn update">Update Images</button>
+        </div>
+
+        <div id="workspace"></div>
+
+        <div class="confirm-section">
+            <button id="confirm" class="confirm-btn" disabled>✓ Confirm Changes</button>
+            <button id="cancel" class="cancel-btn">✕ Cancel</button>
+        </div>
+    </div>
+
+    <script src="image-manager.js"></script>
+</body>
+</html>

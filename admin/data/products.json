@@ -1,0 +1,92 @@
+{
+  "category1": {
+    "name": "Acrylic Swings",
+    "images": [
+      "assets/products/a1.jpg",
+      "assets/products/a2.jpg",
+      "assets/products/a3.jpg",
+      "assets/products/a4.jpg"
+    ]
+  },
+  "category2": {
+    "name": "Teak Wood Swings",
+    "images": [
+      "assets/products/t1.jpg",
+      "assets/products/t2.jpg",
+      "assets/products/t3.jpg",
+      "assets/products/t4.jpg"
+    ]
+  },
+  "category3": {
+    "name": "SS Swings",
+    "images": [
+      "assets/products/s1.jpg",
+      "assets/products/s2.jpg",
+      "assets/products/s3.jpg",
+      "assets/products/s4.jpg"
+    ]
+  },
+  "category4": {
+    "name": "Wicker Swings",
+    "images": [
+      "assets/products/w1.jpg",
+      "assets/products/w2.jpg",
+      "assets/products/w3.jpg",
+      "assets/products/w4.jpg"
+    ]
+  },
+  "category5": {
+    "name": "Single Swings",
+    "images": [
+      "assets/products/ss1.jpg",
+      "assets/products/ss2.jpg",
+      "assets/products/ss3.jpg",
+      "assets/products/ss4.jpg"
+    ]
+  },
+  "category6": {
+    "name": "Outdoor Sitting",
+    "images": [
+      "assets/products/o1.jpg",
+      "assets/products/o2.jpg",
+      "assets/products/o3.jpg",
+      "assets/products/o4.jpg"
+    ]
+  },
+  "category7": {
+    "name": "Garden Set",
+    "images": [
+      "assets/products/g1.jpg",
+      "assets/products/g2.jpg",
+      "assets/products/g3.jpg",
+      "assets/products/g4.jpg"
+    ]
+  },
+  "category8": {
+    "name": "Wall Art",
+    "images": [
+      "assets/products/wa1.jpg",
+      "assets/products/wa2.jpg",
+      "assets/products/wa3.jpg",
+      "assets/products/wa4.jpg"
+    ]
+  },
+  "category9": {
+    "name": "Clocks",
+    "images": [
+      "assets/products/c1.jpg",
+      "assets/products/c2.jpg",
+      "assets/products/c3.jpg",
+      "assets/products/c4.jpg"
+    ]
+  },
+  "category10": {
+    "name": "Mirrors",
+    "images": [
+      "assets/products/m1.jpg",
+      "assets/products/m2.jpg",
+      "assets/products/m3.jpg",
+      "assets/products/m4.jpg"
+    ]
+  }
+}
