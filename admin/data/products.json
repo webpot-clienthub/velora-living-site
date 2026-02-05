@@ -1,92 +1,180 @@
 {
-  "category1": {
-    "name": "Acrylic Swings",
-    "images": [
-      "assets/products/a1.jpg",
-      "assets/products/a2.jpg",
-      "assets/products/a3.jpg",
-      "assets/products/a4.jpg"
-    ]
-  },
-  "category2": {
-    "name": "Teak Wood Swings",
-    "images": [
-      "assets/products/t1.jpg",
-      "assets/products/t2.jpg",
-      "assets/products/t3.jpg",
-      "assets/products/t4.jpg"
-    ]
-  },
-  "category3": {
-    "name": "SS Swings",
-    "images": [
-      "assets/products/s1.jpg",
-      "assets/products/s2.jpg",
-      "assets/products/s3.jpg",
-      "assets/products/s4.jpg"
-    ]
-  },
-  "category4": {
-    "name": "Wicker Swings",
-    "images": [
-      "assets/products/w1.jpg",
-      "assets/products/w2.jpg",
-      "assets/products/w3.jpg",
-      "assets/products/w4.jpg"
-    ]
-  },
-  "category5": {
-    "name": "Single Swings",
-    "images": [
-      "assets/products/ss1.jpg",
-      "assets/products/ss2.jpg",
-      "assets/products/ss3.jpg",
-      "assets/products/ss4.jpg"
-    ]
-  },
-  "category6": {
-    "name": "Outdoor Sitting",
-    "images": [
-      "assets/products/o1.jpg",
-      "assets/products/o2.jpg",
-      "assets/products/o3.jpg",
-      "assets/products/o4.jpg"
-    ]
-  },
-  "category7": {
-    "name": "Garden Set",
-    "images": [
-      "assets/products/g1.jpg",
-      "assets/products/g2.jpg",
-      "assets/products/g3.jpg",
-      "assets/products/g4.jpg"
-    ]
-  },
-  "category8": {
-    "name": "Wall Art",
-    "images": [
-      "assets/products/wa1.jpg",
-      "assets/products/wa2.jpg",
-      "assets/products/wa3.jpg",
-      "assets/products/wa4.jpg"
-    ]
-  },
-  "category9": {
-    "name": "Clocks",
-    "images": [
-      "assets/products/c1.jpg",
-      "assets/products/c2.jpg",
-      "assets/products/c3.jpg",
-      "assets/products/c4.jpg"
-    ]
-  },
-  "category10": {
-    "name": "Mirrors",
-    "images": [
-      "assets/products/m1.jpg",
-      "assets/products/m2.jpg",
-      "assets/products/m3.jpg",
-      "assets/products/m4.jpg"
-    ]
-  }
+    "acyrlic":  {
+                    "name":  "Acyrlic",
+                    "images":  [
+                                   "velora_product/Acyrlic/velo001.png",
+                                   "velora_product/Acyrlic/velo002.png",
+                                   "velora_product/Acyrlic/velo003.png",
+                                   "velora_product/Acyrlic/velo004.png",
+                                   "velora_product/Acyrlic/velo005.png",
+                                   "velora_product/Acyrlic/velo006.png",
+                                   "velora_product/Acyrlic/velo007.png",
+                                   "velora_product/Acyrlic/velo008.png",
+                                   "velora_product/Acyrlic/velo009.png",
+                                   "velora_product/Acyrlic/velo010.png",
+                                   "velora_product/Acyrlic/velo011.png",
+                                   "velora_product/Acyrlic/velo012.png",
+                                   "velora_product/Acyrlic/velo013.png"
+                               ]
+                },
+    "single":  {
+                   "name":  "Single",
+                   "images":  [
+                                  "velora_product/Single/velo014.png",
+                                  "velora_product/Single/velo015.png",
+                                  "velora_product/Single/velo016.png",
+                                  "velora_product/Single/velo017.png",
+                                  "velora_product/Single/velo018.png",
+                                  "velora_product/Single/velo019.png",
+                                  "velora_product/Single/velo020.png",
+                                  "velora_product/Single/velo021.png",
+                                  "velora_product/Single/velo022.png",
+                                  "velora_product/Single/velo023.png",
+                                  "velora_product/Single/velo024.png",
+                                  "velora_product/Single/velo025.png",
+                                  "velora_product/Single/velo026.png",
+                                  "velora_product/Single/velo027.png",
+                                  "velora_product/Single/velo028.png",
+                                  "velora_product/Single/velo029.png"
+                              ]
+               },
+    "stand":  {
+                  "name":  "Stand",
+                  "images":  [
+                                 "velora_product/Stand/velo030.png",
+                                 "velora_product/Stand/velo031.png",
+                                 "velora_product/Stand/velo032.png",
+                                 "velora_product/Stand/velo033.png",
+                                 "velora_product/Stand/velo034.png",
+                                 "velora_product/Stand/velo035.png",
+                                 "velora_product/Stand/velo036.png",
+                                 "velora_product/Stand/velo037.png",
+                                 "velora_product/Stand/velo038.png",
+                                 "velora_product/Stand/velo039.png",
+                                 "velora_product/Stand/velo040.png",
+                                 "velora_product/Stand/velo041.png",
+                                 "velora_product/Stand/velo042.png",
+                                 "velora_product/Stand/velo043.png",
+                                 "velora_product/Stand/velo044.png",
+                                 "velora_product/Stand/velo045.png",
+                                 "velora_product/Stand/velo046.png",
+                                 "velora_product/Stand/velo047.png",
+                                 "velora_product/Stand/velo048.png",
+                                 "velora_product/Stand/velo049.png",
+                                 "velora_product/Stand/velo050.png",
+                                 "velora_product/Stand/velo051.png",
+                                 "velora_product/Stand/velo052.png",
+                                 "velora_product/Stand/velo053.png",
+                                 "velora_product/Stand/velo054.png",
+                                 "velora_product/Stand/velo055.png",
+                                 "velora_product/Stand/velo056.png",
+                                 "velora_product/Stand/velo057.png",
+                                 "velora_product/Stand/velo058.png",
+                                 "velora_product/Stand/velo059.png",
+                                 "velora_product/Stand/velo060.png",
+                                 "velora_product/Stand/velo061.png",
+                                 "velora_product/Stand/velo062.png",
+                                 "velora_product/Stand/velo063.png"
+                             ]
+              },
+    "teak-wood":  {
+                      "name":  "Teak Wood",
+                      "images":  [
+                                     "velora_product/Teak Wood/velo064.png",
+                                     "velora_product/Teak Wood/velo065.png",
+                                     "velora_product/Teak Wood/velo066.png",
+                                     "velora_product/Teak Wood/velo067.png",
+                                     "velora_product/Teak Wood/velo068.png",
+                                     "velora_product/Teak Wood/velo069.png",
+                                     "velora_product/Teak Wood/velo070.png",
+                                     "velora_product/Teak Wood/velo071.png",
+                                     "velora_product/Teak Wood/velo072.png",
+                                     "velora_product/Teak Wood/velo073.png",
+                                     "velora_product/Teak Wood/velo074.png",
+                                     "velora_product/Teak Wood/velo075.png",
+                                     "velora_product/Teak Wood/velo076.png",
+                                     "velora_product/Teak Wood/velo077.png",
+                                     "velora_product/Teak Wood/velo078.png",
+                                     "velora_product/Teak Wood/velo079.png",
+                                     "velora_product/Teak Wood/velo080.png",
+                                     "velora_product/Teak Wood/velo081.png",
+                                     "velora_product/Teak Wood/velo082.png",
+                                     "velora_product/Teak Wood/velo083.png",
+                                     "velora_product/Teak Wood/velo084.png",
+                                     "velora_product/Teak Wood/velo085.png",
+                                     "velora_product/Teak Wood/velo086.png",
+                                     "velora_product/Teak Wood/velo087.png",
+                                     "velora_product/Teak Wood/velo088.png",
+                                     "velora_product/Teak Wood/velo089.png",
+                                     "velora_product/Teak Wood/velo090.png",
+                                     "velora_product/Teak Wood/velo091.png",
+                                     "velora_product/Teak Wood/velo092.png",
+                                     "velora_product/Teak Wood/velo093.png",
+                                     "velora_product/Teak Wood/velo094.png",
+                                     "velora_product/Teak Wood/velo095.png"
+                                 ]
+                  },
+    "wicker":  {
+                   "name":  "Wicker",
+                   "images":  [
+                                  "velora_product/Wicker/velo096.png",
+                                  "velora_product/Wicker/velo097.png",
+                                  "velora_product/Wicker/velo098.png",
+                                  "velora_product/Wicker/velo099.png",
+                                  "velora_product/Wicker/velo100.png",
+                                  "velora_product/Wicker/velo101.png",
+                                  "velora_product/Wicker/velo102.png",
+                                  "velora_product/Wicker/velo103.png",
+                                  "velora_product/Wicker/velo104.png",
+                                  "velora_product/Wicker/velo105.png",
+                                  "velora_product/Wicker/velo106.png",
+                                  "velora_product/Wicker/velo107.png",
+                                  "velora_product/Wicker/velo108.png",
+                                  "velora_product/Wicker/velo109.png",
+                                  "velora_product/Wicker/velo110.png",
+                                  "velora_product/Wicker/velo111.png",
+                                  "velora_product/Wicker/velo112.png",
+                                  "velora_product/Wicker/velo113.png",
+                                  "velora_product/Wicker/velo114.png",
+                                  "velora_product/Wicker/velo115.png",
+                                  "velora_product/Wicker/velo116.png",
+                                  "velora_product/Wicker/velo117.png"
+                              ]
+               },
+    "ss-swing":  {
+                     "name":  "SS Swing",
+                     "images":  [
+
+                                ]
+                 },
+    "outdoor-sitting":  {
+                            "name":  "Outdoor Sitting",
+                            "images":  [
+
+                                       ]
+                        },
+    "garden-set":  {
+                       "name":  "Garden Set",
+                       "images":  [
+
+                                  ]
+                   },
+    "clock":  {
+                  "name":  "Clock",
+                  "images":  [
+
+                             ]
+              },
+    "wall-art":  {
+                     "name":  "Wall Art",
+                     "images":  [
+
+                                ]
+                 },
+    "mirrors":  {
+                    "name":  "Mirrors",
+                    "images":  [
+
+                               ]
+                }
 }
