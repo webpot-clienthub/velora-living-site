@@ -1,26 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin Panel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Velora Living</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
+  <header class="admin-header">
+    <div class="header-left">
+      <h1>Velora Admin</h1>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
 
-<h1>Admin Panel</h1>
+  <div id="admin-container">
+    <h2>Dashboard</h2>
+    
+    <section class="dashboard-grid">
+      <div class="dashboard-card">
+        <div class="card-icon">🖼️</div>
+        <h3>Product Images</h3>
+        <p>Manage and upload product images</p>
+        <button class="card-btn" onclick="window.location.href='image-manager/index.html'">Manage Images</button>
+      </div>
 
-<section class="categories">
-  <button data-category="category1">Acrylic Swings</button>
-  <button data-category="category2">Teak Wood Swings</button>
-  <button data-category="category3">SS Swings</button>
-  <button data-category="category4">Wicker Swings</button>
-  <button data-category="category5">Single Swings</button>
-  <button data-category="category6">Outdoor Sitting</button>
-  <button data-category="category7">Garden Set</button>
-  <button data-category="category8">Wall Art</button>
-  <button data-category="category9">Clocks</button>
-  <button data-category="category10">Mirrors</button>
-</section>
+      <!-- Future features can be added here -->
+      <div class="dashboard-card coming-soon">
+        <div class="card-icon">📊</div>
+        <h3>Analytics</h3>
+        <p>Coming soon</p>
+        <button class="card-btn" disabled>Coming Soon</button>
+      </div>
 
-<script src="admin.js"></script>
+      <div class="dashboard-card coming-soon">
+        <div class="card-icon">⚙️</div>
+        <h3>Settings</h3>
+        <p>Coming soon</p>
+        <button class="card-btn" disabled>Coming Soon</button>
+      </div>
+    </section>
+  </div>
+  <script src="admin.js"></script>
 </body>
 </html>

@@ -30,12 +30,107 @@ function resetUI() {
     document.getElementById('confirm').disabled = true;
 }
 
+// Initialize theme from localStorage
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('themeMode');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        updateThemeToggle('☀️');
+    }
+}
+
+// Toggle theme between light and dark
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('themeMode', isDark ? 'dark' : 'light');
+    updateThemeToggle(isDark ? '☀️' : '🌙');
+}
+
+// Update theme toggle button text
+function updateThemeToggle(icon) {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.textContent = icon;
+    }
+}
+
+function showCategoryPicker() {
+    const workspace = document.getElementById('workspace');
+    const heading = document.querySelector('h2');
+    const actions = document.querySelector('.actions');
+    const confirmSection = document.querySelector('.confirm-section');
+
+    if (actions) actions.classList.add('is-hidden');
+    if (confirmSection) confirmSection.classList.add('is-hidden');
+
+    if (heading) {
+        heading.textContent = 'Select a Category';
+    }
+
+    const categories = Object.keys(productData);
+    if (categories.length === 0) {
+        workspace.innerHTML = '<p>No categories found in velora_product.</p>';
+        return;
+    }
+
+    const cards = categories.map((key) => {
+        const category = productData[key];
+        const name = category?.name || key;
+        const count = category?.images?.length || 0;
+        return `
+            <button class="category-card" data-category="${key}">
+                <span class="category-name">${name}</span>
+                <span class="category-count">${count} images</span>
+            </button>
+        `;
+    });
+
+    workspace.innerHTML = `<div class="category-grid">${cards.join('')}</div>`;
+
+    workspace.querySelectorAll('.category-card').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            window.location.href = `index.html?category=${btn.dataset.category}`;
+        });
+    });
+}
+
+function showInvalidCategory() {
+    const workspace = document.getElementById('workspace');
+    const heading = document.querySelector('h2');
+    const actions = document.querySelector('.actions');
+    const confirmSection = document.querySelector('.confirm-section');
+
+    if (actions) actions.classList.add('is-hidden');
+    if (confirmSection) confirmSection.classList.add('is-hidden');
+
+    if (heading) {
+        heading.textContent = 'Category Not Found';
+    }
+
+    workspace.innerHTML = '<p>Invalid category. Please go back and choose a valid category.</p>';
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize theme
+    initializeTheme();
+    
+    // Setup theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+    
     await loadProducts();
     
-    if (!currentCategory || !productData[currentCategory]) {
-        document.getElementById('workspace').innerHTML = '<p>Invalid category</p>';
+    if (!currentCategory) {
+        showCategoryPicker();
+        return;
+    }
+
+    if (!productData[currentCategory]) {
+        showInvalidCategory();
         return;
     }
     
