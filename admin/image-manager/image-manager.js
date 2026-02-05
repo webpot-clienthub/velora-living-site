@@ -5,6 +5,7 @@ let stagedImages = []; // New images waiting to be added
 let selectedForDelete = []; // Images selected for deletion
 let selectedForUpdate = null; // Single image selected for update
 let productData = {};
+let apiAvailable = false;
 
 // Get category from URL parameter
 const params = new URLSearchParams(window.location.search);
@@ -13,9 +14,22 @@ currentCategory = params.get('category');
 // Load products data
 async function loadProducts() {
     try {
-        const response = await fetch('../data/products.json');
+        const apiResponse = await fetch('/api/products', { cache: 'no-store' });
+        if (apiResponse.ok) {
+            productData = await apiResponse.json();
+            apiAvailable = true;
+            console.log('Products loaded from API:', productData);
+            return;
+        }
+    } catch (error) {
+        console.warn('API not available, falling back to local JSON.');
+    }
+
+    try {
+        const response = await fetch('../data/products.json', { cache: 'no-store' });
         productData = await response.json();
-        console.log('Products loaded:', productData);
+        apiAvailable = false;
+        console.log('Products loaded from local JSON:', productData);
     } catch (error) {
         console.error('Failed to load products:', error);
     }
@@ -171,7 +185,8 @@ function setupAddAction() {
             reader.onload = (event) => {
                 stagedImages.push({
                     name: file.name,
-                    data: event.target.result
+                    data: event.target.result,
+                    file
                 });
                 
                 const preview = document.createElement('div');
@@ -264,7 +279,8 @@ function setupUpdateAction() {
                 stagedImages = [{
                     name: e.target.files[0].name,
                     data: event.target.result,
-                    replaceIndex: selectedForUpdate
+                    replaceIndex: selectedForUpdate,
+                    file: e.target.files[0]
                 }];
             };
             reader.readAsDataURL(e.target.files[0]);
@@ -284,19 +300,25 @@ async function confirmChanges() {
                 alert('No images to add');
                 return;
             }
-            // In a real app, upload to server/storage
-            // For now, simulate adding paths
-            stagedImages.forEach(img => {
-                const newPath = `assets/products/${currentCategory}_${Date.now()}_${img.name}`;
-                productData[currentCategory].images.push(newPath);
-            });
+            if (!apiAvailable) {
+                alert('Server not running. Start the admin server to upload images.');
+                return;
+            }
+            const newPaths = await uploadAddImages(stagedImages, currentCategory);
+            newPaths.forEach((p) => productData[currentCategory].images.push(p));
         } 
         else if (currentAction === 'REMOVE') {
             if (selectedForDelete.length === 0) {
                 alert('No images selected for removal');
                 return;
             }
-            // Remove in reverse order to maintain correct indices
+            if (!apiAvailable) {
+                alert('Server not running. Start the admin server to delete images.');
+                return;
+            }
+            const images = productData[currentCategory].images;
+            const pathsToDelete = selectedForDelete.map((idx) => images[idx]).filter(Boolean);
+            await deleteImages(pathsToDelete);
             selectedForDelete.sort((a, b) => b - a).forEach(idx => {
                 productData[currentCategory].images.splice(idx, 1);
             });
@@ -306,8 +328,15 @@ async function confirmChanges() {
                 alert('No replacement image provided');
                 return;
             }
-            const newPath = `assets/products/${currentCategory}_${Date.now()}_${stagedImages[0].name}`;
-            productData[currentCategory].images[selectedForUpdate] = newPath;
+            if (!apiAvailable) {
+                alert('Server not running. Start the admin server to update images.');
+                return;
+            }
+            const prevPath = productData[currentCategory].images[selectedForUpdate];
+            const newPath = await replaceImage(stagedImages[0], currentCategory, prevPath);
+            if (newPath) {
+                productData[currentCategory].images[selectedForUpdate] = newPath;
+            }
         }
         
         // Save updated data
@@ -324,8 +353,63 @@ async function confirmChanges() {
 }
 
 async function saveProducts() {
-    // In a real app, this would POST to a backend endpoint
-    // For now, we'll just store in localStorage as a demo
-    localStorage.setItem('velora_products', JSON.stringify(productData));
-    console.log('Products saved:', productData);
+    if (!apiAvailable) {
+        localStorage.setItem('velora_products', JSON.stringify(productData));
+        console.log('Products saved to localStorage:', productData);
+        return;
+    }
+
+    await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    });
+    console.log('Products saved to API:', productData);
+}
+
+async function uploadAddImages(images, category) {
+    const formData = new FormData();
+    images.forEach((img) => formData.append('images', img.file, img.name));
+
+    const response = await fetch(`/api/images/add?category=${encodeURIComponent(category)}`, {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error('Upload failed');
+    }
+
+    const data = await response.json();
+    return Array.isArray(data.paths) ? data.paths : [];
+}
+
+async function replaceImage(image, category, prevPath) {
+    const formData = new FormData();
+    formData.append('image', image.file, image.name);
+    formData.append('prevPath', prevPath || '');
+
+    const response = await fetch(`/api/images/replace?category=${encodeURIComponent(category)}`, {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error('Replace failed');
+    }
+
+    const data = await response.json();
+    return data.path || null;
+}
+
+async function deleteImages(paths) {
+    const response = await fetch('/api/images/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paths })
+    });
+
+    if (!response.ok) {
+        throw new Error('Delete failed');
+    }
 }
