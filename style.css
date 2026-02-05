@@ -28,15 +28,25 @@ body {
   animation: fadeIn 1.5s ease;
 }
 
+.brand-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px; /* exact spacing */
+}
+
 .hero-logo {
-  width: 120px;
-  margin-bottom: 20px;
+  width: 250px;
+  margin-bottom: 1px;
 }
 
 .brand-name {
   font-family: 'Playfair Display', serif;
   font-size: 4rem;
+  margin-top: 0;
+  margin-bottom: 10px; /* keeps space before slogan */
 }
+
 
 .slogan {
   letter-spacing: 0.4em;
