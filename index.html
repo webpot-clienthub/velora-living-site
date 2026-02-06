@@ -190,6 +190,17 @@
     </div>
   </section>
 
+  <!-- ZOOM OVERLAY -->
+  <div id="overlay" class="overlay">
+    <div class="overlay-content">
+      <button id="close-btn" class="close-btn">&times;</button>
+      <img id="overlay-img" src="" alt="Product Image">
+      <div id="size-options" class="size-options">
+        <!-- Size buttons will be populated here -->
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="footer">
     <img src="assets/logo.png" class="footer-logo">
@@ -211,17 +222,36 @@
   <script>
     // Product descriptions for dynamic loading
     const productDescriptions = {
-      'category1': 'Crystal-clear elegance crafted for modern spaces.',
-      'category2': 'Natural warmth blended with timeless craftsmanship.',
-      'category3': 'Strength, shine, and minimalist modern design.',
-      'category4': 'Soft textures crafted for relaxed luxury.',
-      'category5': 'A personal space to unwind in style.',
-      'category6': 'Comfortable outdoor designs for open living.',
-      'category7': 'Designed to bring harmony to your greens.',
-      'category8': 'Art that complements space and soul.',
-      'category9': 'Timeless design for elegant interiors.',
-      'category10': 'Reflecting craftsmanship and beauty.'
+      'acyrlic': 'Crystal-clear elegance crafted for modern spaces.',
+      'teak-wood': 'Natural warmth blended with timeless craftsmanship.',
+      'ss-swing': 'Strength, shine, and minimalist modern design.',
+      'wicker': 'Soft textures crafted for relaxed luxury.',
+      'single': 'A personal space to unwind in style.',
+      'outdoor-sitting': 'Comfortable outdoor designs for open living.',
+      'garden-set': 'Designed to bring harmony to your greens.',
+      'wall-art': 'Art that complements space and soul.',
+      'clock': 'Timeless design for elegant interiors.',
+      'mirrors': 'Reflecting craftsmanship and beauty.',
+      'stand': 'Sturdy and stylish stands for your swings.'
     };
+
+    // Size options based on category
+    const sizeOptions = {
+      'acyrlic': ['48"', '60"', '72"'],
+      'teak-wood': ['48"', '60"', '72"'],
+      'ss-swing': ['48"', '60"', '72"'],
+      'wicker': ['48"', '60"', '72"'],
+      'single': ['48"', '60"', '72"'],
+      'stand': ['Small', 'Medium', 'Large'],
+      'outdoor-sitting': ['Small', 'Medium', 'Large'],
+      'garden-set': ['Small', 'Medium', 'Large'],
+      'wall-art': ['Small', 'Medium', 'Large'],
+      'clock': ['Small', 'Medium', 'Large'],
+      'mirrors': ['Small', 'Medium', 'Large']
+    };
+
+    let currentProduct = null;
+    let selectedSize = null;
 
     // Load products dynamically from admin data
     async function loadProductsUI() {
@@ -229,17 +259,19 @@
         const response = await fetch('admin/data/products.json');
         const products = await response.json();
         const track = document.getElementById('product-track');
-        
+
         track.innerHTML = '';
-        
+
         Object.entries(products).forEach(([categoryId, data]) => {
+          if (data.images.length === 0) return; // Skip empty categories
+
           const product = document.createElement('div');
           product.className = 'product';
-          
+
           const imagesHTML = data.images
-            .map(img => `<img src="${img}">`)
+            .map(img => `<img src="${img}" data-category="${categoryId}" data-name="${data.name}">`)
             .join('');
-          
+
           product.innerHTML = `
             <h2>${data.name}</h2>
             <p>${productDescriptions[categoryId] || ''}</p>
@@ -247,25 +279,99 @@
               ${imagesHTML}
             </div>
           `;
-          
+
           track.appendChild(product);
         });
+
+        // Add click listeners to images
+        document.querySelectorAll('.images img').forEach(img => {
+          img.addEventListener('click', openZoom);
+        });
+
       } catch (error) {
         console.error('Failed to load products:', error);
       }
     }
 
+    // Open zoom overlay
+    function openZoom(event) {
+      const img = event.target;
+      currentProduct = {
+        src: img.src,
+        category: img.dataset.category,
+        name: img.dataset.name
+      };
+
+      document.getElementById('overlay-img').src = currentProduct.src;
+      document.getElementById('overlay').classList.add('active');
+
+      // Populate size options
+      const sizeOpts = document.getElementById('size-options');
+      sizeOpts.innerHTML = '';
+      selectedSize = null;
+
+      sizeOptions[currentProduct.category].forEach(size => {
+        const btn = document.createElement('button');
+        btn.className = 'size-btn';
+        btn.textContent = size;
+        btn.addEventListener('click', () => selectSize(btn, size));
+        sizeOpts.appendChild(btn);
+      });
+    }
+
+    // Select size
+    function selectSize(btn, size) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedSize = size;
+
+      // Auto-open WhatsApp after size selection
+      setTimeout(() => {
+        openWhatsApp();
+      }, 500);
+    }
+
+    // Open WhatsApp
+    function openWhatsApp() {
+      if (!selectedSize) return;
+
+      const message = `Hello Velora Living! I'm interested in ${currentProduct.name} in size ${selectedSize}.`;
+      const url = `https://wa.me/919408191506?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+      closeOverlay();
+    }
+
+    // Close overlay
+    function closeOverlay() {
+      document.getElementById('overlay').classList.remove('active');
+      currentProduct = null;
+      selectedSize = null;
+    }
+
+    // Hide loader after page load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 1000); // Delay for smooth transition
+    });
+
     // Load products on page load
     document.addEventListener('DOMContentLoaded', loadProductsUI);
+
+    // Close overlay on click outside or close button
+    document.getElementById('overlay').addEventListener('click', (e) => {
+      if (e.target.id === 'overlay') closeOverlay();
+    });
+    document.getElementById('close-btn').addEventListener('click', closeOverlay);
 
     const products = document.querySelector('.products');
     const track = document.querySelector('.product-track');
 
     function handleScroll() {
       const totalProducts = document.querySelectorAll('.product').length;
-      
+
       if (totalProducts === 0) return;
-      
+
       if (window.innerWidth <= 1024) {
         track.style.transform = 'translateX(0)';
         return;

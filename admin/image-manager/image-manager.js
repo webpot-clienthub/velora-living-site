@@ -6,6 +6,7 @@ let selectedForDelete = []; // Images selected for deletion
 let selectedForUpdate = null; // Single image selected for update
 let productData = {};
 let apiAvailable = false;
+const API_BASE = '../api';
 
 // Get category from URL parameter
 const params = new URLSearchParams(window.location.search);
@@ -14,7 +15,7 @@ currentCategory = params.get('category');
 // Load products data
 async function loadProducts() {
     try {
-        const apiResponse = await fetch('/api/products', { cache: 'no-store' });
+        const apiResponse = await fetch(`${API_BASE}/products.php`, { cache: 'no-store' });
         if (apiResponse.ok) {
             productData = await apiResponse.json();
             apiAvailable = true;
@@ -359,7 +360,7 @@ async function saveProducts() {
         return;
     }
 
-    await fetch('/api/products', {
+    await fetch(`${API_BASE}/products.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productData)
@@ -371,7 +372,7 @@ async function uploadAddImages(images, category) {
     const formData = new FormData();
     images.forEach((img) => formData.append('images', img.file, img.name));
 
-    const response = await fetch(`/api/images/add?category=${encodeURIComponent(category)}`, {
+    const response = await fetch(`${API_BASE}/images_add.php?category=${encodeURIComponent(category)}`, {
         method: 'POST',
         body: formData
     });
@@ -389,7 +390,7 @@ async function replaceImage(image, category, prevPath) {
     formData.append('image', image.file, image.name);
     formData.append('prevPath', prevPath || '');
 
-    const response = await fetch(`/api/images/replace?category=${encodeURIComponent(category)}`, {
+    const response = await fetch(`${API_BASE}/images_replace.php?category=${encodeURIComponent(category)}`, {
         method: 'POST',
         body: formData
     });
@@ -403,7 +404,7 @@ async function replaceImage(image, category, prevPath) {
 }
 
 async function deleteImages(paths) {
-    const response = await fetch('/api/images/delete', {
+    const response = await fetch(`${API_BASE}/images_delete.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paths })
