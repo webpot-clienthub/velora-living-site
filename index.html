@@ -17,6 +17,16 @@
 
 <body>
 
+  <!-- LOADER -->
+  <div id="loader" class="loader">
+    <div class="content">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
+
   <!-- HERO -->
   <section class="hero">
     <div class="brand-stack">
@@ -51,117 +61,8 @@
 
   <!-- PRODUCTS -->
   <section class="products">
-    <div class="product-track">
-
-      <!-- PRODUCT 1 -->
-      <div class="product ">
-        <h2>Acrylic Swings</h2>
-        <p>Crystal-clear elegance crafted for modern spaces.</p>
-        <div class="images">
-          <img src="velora_product/Acyrlic/velo001.png">
-          <img src="velora_product/Acyrlic/velo002.png">
-          <img src="velora_product/Acyrlic/velo003.png">
-          <img src="velora_product/Acyrlic/velo004.png">
-        </div>
-      </div>
-
-      <!-- PRODUCT 2 -->
-      <div class="product">
-        <h2>Teak Wood Swings</h2>
-        <p>Natural warmth blended with timeless craftsmanship.</p>
-        <div class="images">
-          <img src="velora_product/Teak Wood/velo064.png">
-          <img src="velora_product/Teak Wood/velo065.png">
-          <img src="velora_product/Teak Wood/velo066.png">
-          <img src="velora_product/Teak Wood/velo067.png">
-        </div>
-      </div>
-
-      <!-- PRODUCT 3 -->
-      <div class="product">
-        <h2>SS Swings</h2>
-        <p>Strength, shine, and minimalist modern design.</p>
-        <div class="images">
-          <img src="velora_product/SS/velo0071.png">
-          <img src="velora_product/SS/velo0072.png">
-          <img src="velora_product/SS/velo0073.png">
-          <img src="velora_product/SS/velo0074.png">
-        </div>
-      </div>
-
-      <!-- PRODUCT 4 -->
-      <div class="product">
-        <h2>Wicker Swings</h2>
-        <p>Soft textures crafted for relaxed luxury.</p>
-        <div class="images">
-          <img src="velora_product/Wicker/velo096.png">
-          <img src="velora_product/Wicker/velo097.png">
-          <img src="velora_product/Wicker/velo098.png">
-          <img src="velora_product/Wicker/velo099.png">
-        </div>
-      </div>
-
-      <!-- PRODUCT 5 -->
-       <div class="product">
-        <h2>Single Seater Swings</h2>
-        <p>A personal space to unwind in style.</p>
-        <div class="images">
-          <img src="velora_product/Single/velo014.png">
-          <img src="velora_product/Single/velo015.png">
-          <img src="velora_product/Single/velo016.png">
-          <img src="velora_product/Single/velo017.png">
-        </div>
-      </div>
-      
-      <!-- PRODUCT 6 -->
-      <div class="product">
-        <h2>Garden Set</h2>
-        <p>Designed to bring harmony to your greens.</p>
-        <div class="images">
-          <img src="velora_product/Garden Set/">
-        </div>
-      </div>
-
-      <!-- PRODUCT 7 -->
-      <div class="product">
-        <h2>Wall Art</h2>
-        <p>Art that complements space and soul.</p>
-        <div class="images">
-          <img src="velora_product/Wall Art/">
-        </div>
-      </div>
-
-      <!-- PRODUCT 8 -->
-      <div class="product">
-        <h2>Clocks</h2>
-        <p>Timeless design for elegant interiors.</p>
-        <div class="images">
-          <img src="velora_product/Clocks/">
-        </div>
-      </div>
-
-      <!-- PRODUCT 9 -->
-      <div class="product">
-        <h2>Mirrors</h2>
-        <p>Reflecting craftsmanship and beauty.</p>
-        <div class="images">
-          <img src="velora_product/Mirrors/">
-        </div>
-      </div>
-
-      <!-- PRODUCT 10 -->
-      <div class="product">
-        <h2>Outdoor Seating</h2>
-        <p>Comfortable outdoor designs for open living.</p>
-        <div class="images">
-          <img src="assets/products/o1.jpg">
-          <img src="assets/products/o2.jpg">
-          <img src="assets/products/o3.jpg">
-          <img src="assets/products/o4.jpg">
-        </div>
-      </div>
-
-
+    <div id="products-list" class="products-list" aria-label="Product categories">
+      <!-- Populated dynamically from admin/data/products.json -->
     </div>
   </section>
 
@@ -233,35 +134,92 @@
       try {
         const response = await fetch('admin/data/products.json');
         const products = await response.json();
-        const track = document.getElementById('product-track');
+        const list = document.getElementById('products-list');
 
-        track.innerHTML = '';
+        list.innerHTML = '';
 
         Object.entries(products).forEach(([categoryId, data]) => {
           if (data.images.length === 0) return; // Skip empty categories
 
-          const product = document.createElement('div');
-          product.className = 'product';
+          const categorySection = document.createElement('section');
+          categorySection.className = 'category';
+          categorySection.dataset.category = categoryId;
 
-          const imagesHTML = data.images
-            .map(img => `<img src="${img}" data-category="${categoryId}" data-name="${data.name}">`)
-            .join('');
+          const header = document.createElement('div');
+          header.className = 'category-header';
 
-          product.innerHTML = `
-            <h2>${data.name}</h2>
-            <p>${productDescriptions[categoryId] || ''}</p>
-            <div class="images">
-              ${imagesHTML}
-            </div>
-          `;
+          const title = document.createElement('h2');
+          title.textContent = data.name;
 
-          track.appendChild(product);
+          const desc = document.createElement('p');
+          desc.textContent = productDescriptions[categoryId] || '';
+
+          header.appendChild(title);
+          header.appendChild(desc);
+
+          const carousel = document.createElement('div');
+          carousel.className = 'carousel';
+          carousel.setAttribute('aria-label', `${data.name} gallery`);
+
+          const prevBtn = document.createElement('button');
+          prevBtn.type = 'button';
+          prevBtn.className = 'carousel-btn prev';
+          prevBtn.setAttribute('aria-label', `Previous ${data.name} images`);
+          prevBtn.innerHTML = '&#8249;';
+          prevBtn.dataset.carouselPrev = 'true';
+
+          const nextBtn = document.createElement('button');
+          nextBtn.type = 'button';
+          nextBtn.className = 'carousel-btn next';
+          nextBtn.setAttribute('aria-label', `Next ${data.name} images`);
+          nextBtn.innerHTML = '&#8250;';
+          nextBtn.dataset.carouselNext = 'true';
+
+          const viewport = document.createElement('div');
+          viewport.className = 'carousel-viewport';
+          viewport.tabIndex = 0;
+
+          const track = document.createElement('div');
+          track.className = 'carousel-track';
+
+          data.images.forEach((imgPath, idx) => {
+            const slide = document.createElement('button');
+            slide.type = 'button';
+            slide.className = 'carousel-slide';
+            slide.dataset.category = categoryId;
+            slide.dataset.name = data.name;
+            slide.dataset.index = String(idx);
+            slide.setAttribute('aria-label', `${data.name} image ${idx + 1}`);
+
+            const img = document.createElement('img');
+            img.src = imgPath;
+            img.loading = 'lazy';
+            img.alt = data.name;
+
+            slide.appendChild(img);
+            slide.addEventListener('click', openZoom);
+            slide.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openZoom(e);
+              }
+            });
+
+            track.appendChild(slide);
+          });
+
+          viewport.appendChild(track);
+          carousel.appendChild(prevBtn);
+          carousel.appendChild(viewport);
+          carousel.appendChild(nextBtn);
+
+          categorySection.appendChild(header);
+          categorySection.appendChild(carousel);
+
+          list.appendChild(categorySection);
         });
 
-        // Add click listeners to images
-        document.querySelectorAll('.images img').forEach(img => {
-          img.addEventListener('click', openZoom);
-        });
+        setupCarousels();
 
       } catch (error) {
         console.error('Failed to load products:', error);
@@ -270,11 +228,16 @@
 
     // Open zoom overlay
     function openZoom(event) {
-      const img = event.target;
+      const slide = event.target.closest('.carousel-slide');
+      if (!slide) return;
+
+      const img = slide.querySelector('img');
+      if (!img) return;
+
       currentProduct = {
         src: img.src,
-        category: img.dataset.category,
-        name: img.dataset.name
+        category: slide.dataset.category,
+        name: slide.dataset.name
       };
 
       document.getElementById('overlay-img').src = currentProduct.src;
@@ -285,7 +248,14 @@
       sizeOpts.innerHTML = '';
       selectedSize = null;
 
-      sizeOptions[currentProduct.category].forEach(size => {
+      const options = sizeOptions[currentProduct.category] || [];
+      if (options.length === 0) {
+        sizeOpts.style.display = 'none';
+        return;
+      }
+
+      sizeOpts.style.display = '';
+      options.forEach(size => {
         const btn = document.createElement('button');
         btn.className = 'size-btn';
         btn.textContent = size;
@@ -323,6 +293,94 @@
       selectedSize = null;
     }
 
+    function setupCarousels() {
+      const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      document.querySelectorAll('.carousel').forEach((carousel) => {
+        const viewport = carousel.querySelector('.carousel-viewport');
+        const prev = carousel.querySelector('[data-carousel-prev]');
+        const next = carousel.querySelector('[data-carousel-next]');
+
+        if (!viewport || !prev || !next) return;
+
+        const getStep = () => {
+          const firstSlide = carousel.querySelector('.carousel-slide');
+          if (!firstSlide) return viewport.clientWidth;
+
+          const slideRect = firstSlide.getBoundingClientRect();
+          const track = carousel.querySelector('.carousel-track');
+          const styles = track ? getComputedStyle(track) : null;
+          const gap = styles ? (parseFloat(styles.gap || styles.columnGap || '0') || 0) : 0;
+          return Math.max(1, slideRect.width + gap);
+        };
+
+        const updateButtons = () => {
+          const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
+          const hasOverflow = maxScrollLeft > 2;
+          const atStart = viewport.scrollLeft <= 2;
+          const atEnd = viewport.scrollLeft >= maxScrollLeft - 2;
+
+          prev.hidden = !hasOverflow;
+          next.hidden = !hasOverflow;
+          prev.disabled = atStart;
+          next.disabled = atEnd;
+        };
+
+        const scrollByStep = (direction) => {
+          const step = getStep();
+          viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
+        };
+
+        prev.addEventListener('click', () => scrollByStep(-1));
+        next.addEventListener('click', () => scrollByStep(1));
+        viewport.addEventListener('scroll', updateButtons, { passive: true });
+        window.addEventListener('resize', updateButtons);
+
+        updateButtons();
+
+        if (prefersReducedMotion) return;
+
+        let timer = null;
+        const advance = () => {
+          const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
+          if (viewport.scrollLeft >= maxScrollLeft - 2) {
+            viewport.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            scrollByStep(1);
+          }
+        };
+
+        const start = () => {
+          if (timer) return;
+          if (viewport.scrollWidth <= viewport.clientWidth + 2) return;
+          timer = setInterval(advance, 3500);
+        };
+
+        const stop = () => {
+          if (!timer) return;
+          clearInterval(timer);
+          timer = null;
+        };
+
+        carousel.addEventListener('mouseenter', stop);
+        carousel.addEventListener('mouseleave', start);
+        carousel.addEventListener('focusin', stop);
+        carousel.addEventListener('focusout', start);
+
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver((entries) => {
+            const isVisible = entries.some((e) => e.isIntersecting);
+            if (isVisible) start();
+            else stop();
+          }, { threshold: 0.4 });
+
+          io.observe(carousel);
+        } else {
+          start();
+        }
+      });
+    }
+
     // Hide loader after page load
     window.addEventListener('load', () => {
       setTimeout(() => {
@@ -338,33 +396,6 @@
       if (e.target.id === 'overlay') closeOverlay();
     });
     document.getElementById('close-btn').addEventListener('click', closeOverlay);
-
-    const products = document.querySelector('.products');
-    const track = document.querySelector('.product-track');
-
-    function handleScroll() {
-      const totalProducts = document.querySelectorAll('.product').length;
-
-      if (totalProducts === 0) return;
-
-      if (window.innerWidth <= 1024) {
-        track.style.transform = 'translateX(0)';
-        return;
-      }
-
-      const start = products.offsetTop;
-      const end = start + products.offsetHeight - window.innerHeight;
-      const scroll = window.scrollY;
-
-      if (scroll >= start && scroll <= end) {
-        const progress = (scroll - start) / (end - start);
-        const moveX = progress * (totalProducts - 1) * window.innerWidth;
-        track.style.transform = `translateX(-${moveX}px)`;
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll);
   </script>
 
 
