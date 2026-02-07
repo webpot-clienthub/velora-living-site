@@ -370,7 +370,7 @@ async function saveProducts() {
 
 async function uploadAddImages(images, category) {
     const formData = new FormData();
-    images.forEach((img) => formData.append('images', img.file, img.name));
+    images.forEach((img) => formData.append('images[]', img.file, img.name));
 
     const response = await fetch(`${API_BASE}/images_add.php?category=${encodeURIComponent(category)}`, {
         method: 'POST',
@@ -378,7 +378,17 @@ async function uploadAddImages(images, category) {
     });
 
     if (!response.ok) {
-        throw new Error('Upload failed');
+        let details = '';
+        try {
+            const err = await response.json();
+            details = err?.error ? `: ${err.error}` : '';
+        } catch (_) {
+            try {
+                const text = await response.text();
+                details = text ? `: ${text}` : '';
+            } catch (_) {}
+        }
+        throw new Error(`Upload failed${details}`);
     }
 
     const data = await response.json();
@@ -396,7 +406,17 @@ async function replaceImage(image, category, prevPath) {
     });
 
     if (!response.ok) {
-        throw new Error('Replace failed');
+        let details = '';
+        try {
+            const err = await response.json();
+            details = err?.error ? `: ${err.error}` : '';
+        } catch (_) {
+            try {
+                const text = await response.text();
+                details = text ? `: ${text}` : '';
+            } catch (_) {}
+        }
+        throw new Error(`Replace failed${details}`);
     }
 
     const data = await response.json();
@@ -411,6 +431,16 @@ async function deleteImages(paths) {
     });
 
     if (!response.ok) {
-        throw new Error('Delete failed');
+        let details = '';
+        try {
+            const err = await response.json();
+            details = err?.error ? `: ${err.error}` : '';
+        } catch (_) {
+            try {
+                const text = await response.text();
+                details = text ? `: ${text}` : '';
+            } catch (_) {}
+        }
+        throw new Error(`Delete failed${details}`);
     }
 }

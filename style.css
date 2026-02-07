@@ -208,20 +208,67 @@ body {
 .footer {
   background: linear-gradient(to right, var(--beige), var(--brown));
   color: white;
-  text-align: center;
-  padding: 60px;
+  padding: 60px 0;
+}
+
+.footer-inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: clamp(20px, 6vw, 120px);
+  padding-right: clamp(20px, 6vw, 120px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.footer-brand {
+  text-align: left;
 }
 
 .footer-logo {
   width: 80px;
   margin-bottom: 15px;
+  display: block;
 }
 
-.footer-links a {
-  margin: 0 15px;
+.footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  text-align: center;
+}
+
+.footer-links a,
+.footer-admin-link {
   color: white;
   text-decoration: none;
   font-weight: 300;
+  opacity: 0.95;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-links a:hover,
+.footer-admin-link:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.footer-admin-link {
+  position: absolute;
+  right: clamp(20px, 6vw, 120px);
+  bottom: 18px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.footer-admin-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 6px;
+  border-radius: 10px;
 }
 
 /* LOADING ANIMATION */
@@ -397,12 +444,24 @@ body {
 
   /* FOOTER */
   .footer {
-    padding: 40px 20px;
+    padding: 40px 0;
   }
 
-  .footer-links a {
-    display: block;
-    margin: 12px 0;
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+  }
+
+  .footer-admin-link {
+    position: static;
+    align-self: flex-end;
+    margin-top: 6px;
+    opacity: 0.85;
   }
 }
 @media (max-width: 1024px) {

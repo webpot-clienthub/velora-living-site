@@ -50,7 +50,11 @@ $categoryName = $products[$categoryKey]['name'] ?? $categoryKey;
 $destDir = $productRoot . DIRECTORY_SEPARATOR . $categoryName;
 
 if (!is_dir($destDir)) {
-    mkdir($destDir, 0775, true);
+    if (!mkdir($destDir, 0775, true) && !is_dir($destDir)) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to create category folder']);
+        exit;
+    }
 }
 
 if (empty($_FILES['images'])) {
@@ -60,15 +64,37 @@ if (empty($_FILES['images'])) {
 }
 
 $paths = [];
-$count = count($_FILES['images']['name']);
+$fileSpec = $_FILES['images'];
+
+// Support both `images[]` (array) and `images` (single file) inputs.
+$names = $fileSpec['name'] ?? null;
+$tmpNames = $fileSpec['tmp_name'] ?? null;
+$errors = $fileSpec['error'] ?? null;
+
+if (is_array($names)) {
+    $count = count($names);
+} elseif (is_string($names) && is_string($tmpNames)) {
+    $count = 1;
+    $names = [$names];
+    $tmpNames = [$tmpNames];
+    $errors = [is_int($errors) ? $errors : UPLOAD_ERR_OK];
+} else {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid upload payload']);
+    exit;
+}
 
 for ($i = 0; $i < $count; $i++) {
-    $tmp = $_FILES['images']['tmp_name'][$i];
+    if (($errors[$i] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        continue;
+    }
+
+    $tmp = $tmpNames[$i] ?? '';
     if (!is_uploaded_file($tmp)) {
         continue;
     }
 
-    $name = safeName($_FILES['images']['name'][$i]);
+    $name = safeName($names[$i] ?? 'image');
     $filename = time() . '-' . $i . '-' . $name;
     $dest = $destDir . DIRECTORY_SEPARATOR . $filename;
 
@@ -76,6 +102,12 @@ for ($i = 0; $i < $count; $i++) {
         $rel = ltrim(str_replace($siteRoot, '', $dest), DIRECTORY_SEPARATOR);
         $paths[] = str_replace(DIRECTORY_SEPARATOR, '/', $rel);
     }
+}
+
+if (count($paths) === 0) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Failed to save uploaded files']);
+    exit;
 }
 
 echo json_encode(['paths' => $paths]);

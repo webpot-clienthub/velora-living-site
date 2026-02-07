@@ -58,7 +58,11 @@ $categoryName = $products[$categoryKey]['name'] ?? $categoryKey;
 $destDir = $productRoot . DIRECTORY_SEPARATOR . $categoryName;
 
 if (!is_dir($destDir)) {
-    mkdir($destDir, 0775, true);
+    if (!mkdir($destDir, 0775, true) && !is_dir($destDir)) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to create category folder']);
+        exit;
+    }
 }
 
 if (empty($_FILES['image']) || !is_uploaded_file($_FILES['image']['tmp_name'])) {
