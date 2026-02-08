@@ -6,7 +6,7 @@ let selectedForDelete = []; // Images selected for deletion
 let selectedForUpdate = null; // Single image selected for update
 let productData = {};
 let apiAvailable = false;
-const API_BASE = '../api';
+const API_BASE = '/api';
 
 // Get category from URL parameter
 const params = new URLSearchParams(window.location.search);
@@ -15,12 +15,15 @@ currentCategory = params.get('category');
 // Load products data
 async function loadProducts() {
     try {
-        const apiResponse = await fetch(`${API_BASE}/products.php`, { cache: 'no-store' });
+        const apiResponse = await fetch(`${API_BASE}/products`, { cache: 'no-store', credentials: 'same-origin' });
         if (apiResponse.ok) {
-            productData = await apiResponse.json();
-            apiAvailable = true;
-            console.log('Products loaded from API:', productData);
-            return;
+            const data = await apiResponse.json();
+            if (data && typeof data === 'object') {
+                productData = data;
+                apiAvailable = true;
+                console.log('Products loaded from API:', productData);
+                return;
+            }
         }
     } catch (error) {
         console.warn('API not available, falling back to local JSON.');
@@ -128,6 +131,9 @@ function showInvalidCategory() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
+    if (window.AUTH && AUTH.requireAuth) {
+        await AUTH.requireAuth();
+    }
     // Initialize theme
     initializeTheme();
     
@@ -135,6 +141,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            if (window.AUTH && AUTH.logout) {
+                await AUTH.logout();
+            }
+            window.location.href = '/admin/login.html';
+        });
     }
     
     await loadProducts();
@@ -360,9 +376,10 @@ async function saveProducts() {
         return;
     }
 
-    await fetch(`${API_BASE}/products.php`, {
+    await fetch(`${API_BASE}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify(productData)
     });
     console.log('Products saved to API:', productData);
@@ -370,10 +387,11 @@ async function saveProducts() {
 
 async function uploadAddImages(images, category) {
     const formData = new FormData();
-    images.forEach((img) => formData.append('images[]', img.file, img.name));
+    images.forEach((img) => formData.append('images', img.file, img.name));
 
-    const response = await fetch(`${API_BASE}/images_add.php?category=${encodeURIComponent(category)}`, {
+    const response = await fetch(`${API_BASE}/images/add?category=${encodeURIComponent(category)}`, {
         method: 'POST',
+        credentials: 'same-origin',
         body: formData
     });
 
@@ -400,8 +418,9 @@ async function replaceImage(image, category, prevPath) {
     formData.append('image', image.file, image.name);
     formData.append('prevPath', prevPath || '');
 
-    const response = await fetch(`${API_BASE}/images_replace.php?category=${encodeURIComponent(category)}`, {
+    const response = await fetch(`${API_BASE}/images/replace?category=${encodeURIComponent(category)}`, {
         method: 'POST',
+        credentials: 'same-origin',
         body: formData
     });
 
@@ -424,9 +443,10 @@ async function replaceImage(image, category, prevPath) {
 }
 
 async function deleteImages(paths) {
-    const response = await fetch(`${API_BASE}/images_delete.php`, {
+    const response = await fetch(`${API_BASE}/images/delete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ paths })
     });
 

@@ -1,33 +1,67 @@
 // Authentication module for Velora Admin Panel
-// Open login: accepts any username/password and grants a session
+// Cookie-based login backed by the Node server (server.js)
 
 const AUTH = {
-  // Initialize - check if user is logged in
-  init() {
-    // No-op: admin routes are always accessible
+  async session() {
+    try {
+      const res = await fetch('/admin/api/session', { cache: 'no-store', credentials: 'same-origin' });
+      if (!res.ok) return { authenticated: false };
+      const data = await res.json();
+      if (data && data.authenticated && data.username) {
+        sessionStorage.setItem('adminUser', data.username);
+      }
+      return data || { authenticated: false };
+    } catch (_) {
+      return { authenticated: false };
+    }
   },
 
   // Check if user is authenticated
-  isAuthenticated() {
-    return true;
+  async isAuthenticated() {
+    const s = await this.session();
+    return !!s.authenticated;
   },
 
-  // Login function that accepts any username/password
+  // Login function (hard-coded credentials on the server)
   async login(username, password) {
-    // Set authentication token in sessionStorage
-    sessionStorage.setItem('adminToken', 'authenticated_session');
-    sessionStorage.setItem('adminUser', username);
-    return { success: true };
+    try {
+      const res = await fetch('/admin/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) return { success: false, error: 'invalid_credentials' };
+
+      if (data && data.username) {
+        sessionStorage.setItem('adminUser', data.username);
+      }
+      return { success: true };
+    } catch (_) {
+      return { success: false, error: 'network' };
+    }
   },
 
   // Logout function
-  logout() {
-    sessionStorage.removeItem('adminToken');
+  async logout() {
+    try {
+      await fetch('/admin/api/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch (_) {}
     sessionStorage.removeItem('adminUser');
   },
 
   // Get logged-in username
   getUsername() {
     return sessionStorage.getItem('adminUser') || null;
+  },
+
+  async requireAuth() {
+    const s = await this.session();
+    if (s && s.authenticated) return s;
+    const next = encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+    window.location.href = `/admin/login.html?next=${next}`;
+    return { authenticated: false };
   }
 };

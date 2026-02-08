@@ -1,7 +1,10 @@
 // Admin Panel Logic
 
 // Initialize authentication on page load
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.AUTH && AUTH.requireAuth) {
+    await AUTH.requireAuth();
+  }
   initializeTheme();
   setupEventListeners();
 });
@@ -23,6 +26,15 @@ function setupEventListeners() {
     themeToggle.addEventListener('click', toggleTheme);
   }
 
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      if (window.AUTH && AUTH.logout) {
+        await AUTH.logout();
+      }
+      window.location.href = '/admin/login.html';
+    });
+  }
 }
 
 // Toggle theme between light and dark
