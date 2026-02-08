@@ -283,10 +283,26 @@
     }
 
     // Open WhatsApp
+    function getImageIdFromSrc(src) {
+      if (!src) return '';
+
+      try {
+        const url = new URL(src, window.location.href);
+        const filename = (url.pathname.split('/').pop() || '').trim();
+        return filename.replace(/\.[a-z0-9]+$/i, '');
+      } catch (err) {
+        const sanitized = String(src).split('?')[0].split('#')[0];
+        const filename = (sanitized.split('/').pop() || '').trim();
+        return filename.replace(/\.[a-z0-9]+$/i, '');
+      }
+    }
+
     function openWhatsApp() {
       if (!selectedSize) return;
 
-      const message = `Hello Velora Living! I'm interested in ${currentProduct.name} in size ${selectedSize}.`;
+      const imageId = currentProduct && currentProduct.src ? getImageIdFromSrc(currentProduct.src) : '';
+      const productRef = imageId ? `ID: ${imageId}` : currentProduct.name;
+      const message = `Hello Velora Living! I'm interested in ${productRef} in size ${selectedSize}.`;
       const url = `https://wa.me/919408191506?text=${encodeURIComponent(message)}`;
       window.open(url, '_blank');
       closeOverlay();
