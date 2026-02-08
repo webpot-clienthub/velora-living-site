@@ -24,6 +24,8 @@ function scanProducts(string $productRoot, string $siteRoot): array {
     $dirs = array_filter(glob($productRoot . '/*'), 'is_dir');
     sort($dirs, SORT_NATURAL | SORT_FLAG_CASE);
 
+    $allowedExt = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+
     foreach ($dirs as $dir) {
         $name = basename($dir);
         $key = slugify($name);
@@ -33,8 +35,16 @@ function scanProducts(string $productRoot, string $siteRoot): array {
         sort($files, SORT_NATURAL | SORT_FLAG_CASE);
 
         foreach ($files as $file) {
+            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowedExt, true)) {
+                continue;
+            }
             $rel = ltrim(str_replace($siteRoot, '', $file), DIRECTORY_SEPARATOR);
             $images[] = str_replace(DIRECTORY_SEPARATOR, '/', $rel);
+        }
+
+        if (count($images) === 0) {
+            continue; // don't show empty folders
         }
 
         $data[$key] = [
@@ -64,12 +74,21 @@ $siteRoot = realpath(__DIR__ . '/../..');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = scanProducts($productRoot, $siteRoot);
+
+    // If nothing found in velora_product, keep the existing products.json as-is.
+    if (count($data) === 0) {
+        $existing = readJson($productsPath);
+        echo json_encode($existing);
+        exit;
+    }
+
     writeJson($productsPath, $data);
     echo json_encode($data);
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require __DIR__ . '/_require_auth.php';
     $raw = file_get_contents('php://input');
     $data = json_decode($raw, true);
     if (!is_array($data)) {

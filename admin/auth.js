@@ -1,10 +1,10 @@
 // Authentication module for Velora Admin Panel
-// Cookie-based login backed by the Node server (server.js)
+// PHP session-based auth (Hostinger / Apache)
 
 const AUTH = {
   async session() {
     try {
-      const res = await fetch('/admin/api/session', { cache: 'no-store', credentials: 'same-origin' });
+      const res = await fetch('/admin/api/auth_session.php', { cache: 'no-store', credentials: 'same-origin' });
       if (!res.ok) return { authenticated: false };
       const data = await res.json();
       if (data && data.authenticated && data.username) {
@@ -25,7 +25,7 @@ const AUTH = {
   // Login function (hard-coded credentials on the server)
   async login(username, password) {
     try {
-      const res = await fetch('/admin/api/login', {
+      const res = await fetch('/admin/api/auth_login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -47,7 +47,7 @@ const AUTH = {
   // Logout function
   async logout() {
     try {
-      await fetch('/admin/api/logout', { method: 'POST', credentials: 'same-origin' });
+      await fetch('/admin/api/auth_logout.php', { method: 'POST', credentials: 'same-origin' });
     } catch (_) {}
     sessionStorage.removeItem('adminUser');
   },

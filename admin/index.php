@@ -1,3 +1,15 @@
+<?php
+declare(strict_types=1);
+
+require __DIR__ . '/api/_session.php';
+
+$user = $_SESSION['velora_admin_user'] ?? null;
+if (!is_string($user) || $user === '') {
+  $next = urlencode($_SERVER['REQUEST_URI'] ?? '/admin/index.php');
+  header("Location: /admin/login.html?next={$next}");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +38,7 @@
         <div class="card-icon">🖼️</div>
         <h3>Product Images</h3>
         <p>Manage and upload product images</p>
-        <button class="card-btn" onclick="window.location.href='image-manager/index.html'">Manage Images</button>
+        <button class="card-btn" onclick="window.location.href='image-manager/index.php'">Manage Images</button>
       </div>
 
       <!-- Future features can be added here -->

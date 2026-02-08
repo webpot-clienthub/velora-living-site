@@ -226,8 +226,8 @@
 
     function getNextUrl() {
       const params = new URLSearchParams(window.location.search);
-      const next = params.get('next') || '/admin/index.html';
-      return next.startsWith('/admin/') ? next : '/admin/index.html';
+      const next = params.get('next') || '/admin/index.php';
+      return next.startsWith('/admin/') ? next : '/admin/index.php';
     }
 
     async function maybeRedirectIfLoggedIn() {

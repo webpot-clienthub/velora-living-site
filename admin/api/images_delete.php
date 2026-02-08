@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 header('Content-Type: application/json');
+require __DIR__ . '/_require_auth.php';
 
 $productRoot = realpath(__DIR__ . '/../../velora_product');
 $siteRoot = realpath(__DIR__ . '/../..');

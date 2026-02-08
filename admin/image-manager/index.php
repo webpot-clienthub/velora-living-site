@@ -1,3 +1,15 @@
+<?php
+declare(strict_types=1);
+
+require __DIR__ . '/../api/_session.php';
+
+$user = $_SESSION['velora_admin_user'] ?? null;
+if (!is_string($user) || $user === '') {
+  $next = urlencode($_SERVER['REQUEST_URI'] ?? '/admin/image-manager/index.php');
+  header("Location: /admin/login.html?next={$next}");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +23,7 @@
     <div id="image-manager-container">
         <header class="manager-header">
             <div class="header-left">
-                <a href="../index.html" class="back-link">&larr; Back to Dashboard</a>
+                <a href="../index.php" class="back-link">&larr; Back to Dashboard</a>
                 <h1>Image Manager</h1>
             </div>
             <div class="header-right">

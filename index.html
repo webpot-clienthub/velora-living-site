@@ -166,14 +166,39 @@
     // Load products dynamically from admin data
     async function loadProductsUI() {
       try {
-        const response = await fetch('admin/data/products.json');
-        const products = await response.json();
+        const sources = [
+          'admin/api/products.php',
+          'admin/data/products.json'
+        ];
+
+        let products = null;
+
+        for (const url of sources) {
+          try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) continue;
+            const data = await response.json();
+            if (!data || typeof data !== 'object') continue;
+
+            const hasAnyImages = Object.values(data).some((v) => Array.isArray(v?.images) && v.images.length > 0);
+            if (!hasAnyImages) continue;
+
+            products = data;
+            break;
+          } catch (_) {}
+        }
+
+        if (!products) {
+          console.warn('No products source available.');
+          return;
+        }
+
         const list = document.getElementById('products-list');
 
         list.innerHTML = '';
 
         Object.entries(products).forEach(([categoryId, data]) => {
-          if (data.images.length === 0) return; // Skip empty categories
+          if (!data || !Array.isArray(data.images) || data.images.length === 0) return; // Skip empty categories
 
           const categorySection = document.createElement('section');
           categorySection.className = 'category';
