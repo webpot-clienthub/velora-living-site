@@ -1,0 +1,54 @@
+<?php
+declare(strict_types=1);
+
+require __DIR__ . '/../api/_session.php';
+
+$user = $_SESSION['velora_admin_user'] ?? null;
+if (!is_string($user) || $user === '') {
+  $next = urlencode($_SERVER['REQUEST_URI'] ?? '/admin/image-manager/index.php');
+  header("Location: /admin/login.html?next={$next}");
+  exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Manager - Velora Living Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="image-manager.css">
+</head>
+<body>
+    <div id="image-manager-container">
+        <header class="manager-header">
+            <div class="header-left">
+                <a href="../index.php" class="back-link">&larr; Back to Dashboard</a>
+                <h1>Image Manager</h1>
+            </div>
+            <div class="header-right">
+                <button class="logout-btn" id="logout-btn" title="Logout">Logout</button>
+                <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+            </div>
+        </header>
+        
+        <h2></h2>
+
+        <div class="actions">
+            <button id="add" class="action-btn add">Add Images</button>
+            <button id="remove" class="action-btn remove">Remove Images</button>
+            <button id="update" class="action-btn update">Update Images</button>
+        </div>
+
+        <div id="workspace"></div>
+
+        <div class="confirm-section">
+            <button id="confirm" class="confirm-btn" disabled>✓ Confirm Changes</button>
+            <button id="cancel" class="cancel-btn">✕ Cancel</button>
+        </div>
+    </div>
+
+    <script src="../auth.js"></script>
+    <script src="image-manager.js"></script>
+</body>
+</html>

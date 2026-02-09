@@ -224,24 +224,38 @@
       document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
     });
 
+    function getNextUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get('next') || '/admin/index.php';
+      return next.startsWith('/admin/') ? next : '/admin/index.php';
+    }
+
+    async function maybeRedirectIfLoggedIn() {
+      const s = await AUTH.session();
+      if (s && s.authenticated) {
+        window.location.href = getNextUrl();
+      }
+    }
+
+    maybeRedirectIfLoggedIn();
+
     // Login form
-    document.getElementById('login-form').addEventListener('submit', (e) => {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
       const errorMsg = document.getElementById('error-message');
 
-      const result = AUTH.login(username, password);
+      const result = await AUTH.login(username, password);
       
       if (result.success) {
-        window.location.href = 'index.html';
+        window.location.href = getNextUrl();
       } else {
         // Show specific error message
-        if (result.error === 'username') {
-          errorMsg.textContent = 'Invalid username. Please check and try again.';
-        } else {
-          errorMsg.textContent = 'Invalid password. Please try again.';
-        }
+        errorMsg.textContent =
+          result.error === 'network'
+            ? 'Server not reachable. Start the admin server and try again.'
+            : 'Invalid username or password. Please try again.';
         errorMsg.style.display = 'block';
         document.getElementById('password').value = '';
         document.getElementById('username').focus();

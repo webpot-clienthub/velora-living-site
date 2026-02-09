@@ -1,0 +1,63 @@
+<?php
+declare(strict_types=1);
+
+require __DIR__ . '/api/_session.php';
+
+$user = $_SESSION['velora_admin_user'] ?? null;
+if (!is_string($user) || $user === '') {
+  $next = urlencode($_SERVER['REQUEST_URI'] ?? '/admin/index.php');
+  header("Location: /admin/login.html?next={$next}");
+  exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Velora Living</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <div class="header-left">
+      <h1>Velora Admin</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-btn" id="logout-btn" title="Logout">Logout</button>
+      <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <div id="admin-container">
+    <h2>Dashboard</h2>
+    
+    <section class="dashboard-grid">
+      <div class="dashboard-card">
+        <div class="card-icon">🖼️</div>
+        <h3>Product Images</h3>
+        <p>Manage and upload product images</p>
+        <button class="card-btn" onclick="window.location.href='image-manager/index.php'">Manage Images</button>
+      </div>
+
+      <!-- Future features can be added here -->
+      <div class="dashboard-card coming-soon">
+        <div class="card-icon">📊</div>
+        <h3>Analytics</h3>
+        <p>Coming soon</p>
+        <button class="card-btn" disabled>Coming Soon</button>
+      </div>
+
+      <div class="dashboard-card coming-soon">
+        <div class="card-icon">⚙️</div>
+        <h3>Settings</h3>
+        <p>Coming soon</p>
+        <button class="card-btn" disabled>Coming Soon</button>
+      </div>
+    </section>
+  </div>
+  <script src="auth.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
