@@ -2,6 +2,7 @@
     "acyrlic": {
         "name": "Acyrlic",
         "images": [
+            "velora_product/Acyrlic/velo001.png",
             "velora_product/Acyrlic/velo002.png",
             "velora_product/Acyrlic/velo003.png",
             "velora_product/Acyrlic/velo004.png",
@@ -89,6 +90,10 @@
             "velora_product/Single/velo029.png"
         ]
     },
+    "ss-swing": {
+        "name": "SS Swing",
+        "images": []
+    },
     "stand": {
         "name": "Stand",
         "images": [
@@ -164,6 +169,10 @@
             "velora_product/Teak Wood/velo094.png",
             "velora_product/Teak Wood/velo095.png"
         ]
+    },
+    "wall-art": {
+        "name": "Wall Art",
+        "images": []
     },
     "wicker": {
         "name": "Wicker",

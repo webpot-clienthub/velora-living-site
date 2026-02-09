@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Terms & Conditions | Velora Living</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="legal.css">
+</head>
+
+<body>
+
+
+    <section class="legal-hero">
+        <h1>Terms & Conditions</h1>
+        <p>Velora Living</p> <br>
+        Last Updated: <span id="lastUpdated"></span>
+    </section>
+
+    <section class="legal-content">
+        <section>
+            <h2>Introduction</h2>
+            <p>These Terms and Conditions govern your access to and use of the Velora Living website and services.</p>
+        </section>
+
+
+        <section>
+            <h2>Eligibility</h2>
+            <p>By using this website, you confirm that you are legally capable of entering into binding agreements.</p>
+        </section>
+
+
+        <section>
+            <h2>Use of Website</h2>
+            <p>You agree not to misuse the website, engage in fraudulent activity, or attempt unauthorized access.</p>
+        </section>
+
+
+        <section>
+            <h2>Products & Services</h2>
+            <p>All product descriptions, pricing, and availability are subject to change without notice.</p>
+        </section>
+
+
+        <section>
+            <h2>Orders & Payments</h2>
+            <p>Orders are confirmed only after communication via WhatsApp or email. Velora Living reserves the right to
+                refuse service.</p>
+        </section>
+
+
+        <section>
+            <h2>Intellectual Property</h2>
+            <p>All content, designs, images, and branding are the exclusive property of Velora Living.</p>
+        </section>
+
+
+        <section>
+            <h2>Third-Party Links</h2>
+            <p>We are not responsible for content or practices of third-party websites linked from our platform.</p>
+        </section>
+
+
+        <section>
+            <h2>Limitation of Liability</h2>
+            <p>Velora Living shall not be liable for indirect, incidental, or consequential damages.</p>
+        </section>
+
+
+        <section>
+            <h2>Indemnification</h2>
+            <p>You agree to indemnify and hold Velora Living harmless from claims arising out of misuse of the website.
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Termination</h2>
+            <p>We reserve the right to suspend or terminate access if these terms are violated.</p>
+        </section>
+
+
+        <section>
+            <h2>Governing Law</h2>
+            <p>These terms are governed by the laws of India.</p>
+        </section>
+
+
+        <section>
+            <h2>Updates to Terms</h2>
+            <p>Velora Living may update these Terms at any time. Continued usage constitutes acceptance.</p>
+        </section>
+
+
+        <section>
+            <h2>Contact Information</h2>
+            <p>Email: byveloraliving@gmail.com<br>Phone: +91 9510141167</p>
+        </section>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="velora-logo.png" class="footer-logo" alt="Velora Living">
+                <h3>Velora Living</h3>
+                <p>Space That Feels Alive</p>
+            </div>
+            <nav class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="https://wa.me/919510141167?text=Hello%20Velora,%20I%E2%80%99d%20love%20to%20connect%20with%20you%20regarding%20your%20products."
+                    target="_blank" rel="noopener">
+                    WhatsApp </a>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+                <a href="https://instagram.com/byveloraliving" target="_blank">Instagram</a>
+            </nav>
+        </div>
+    </footer>
+    <script>
+        const lastUpdated = document.getElementById('lastUpdated');
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        lastUpdated.textContent = today.toLocaleDateString('en-US', options);
+
+        const sections = document.querySelectorAll('.legal-content section');
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
+
+        sections.forEach(section => observer.observe(section));
+
+    </script>
+</body>
+
+</html>

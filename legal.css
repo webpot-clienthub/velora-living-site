@@ -1,0 +1,73 @@
+.legal-hero {
+  padding: 140px 20px 80px;
+  text-align: center;
+  background: linear-gradient(145deg, var(--beige), var(--offwhite));
+}
+
+.legal-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+}
+
+.legal-hero p {
+  letter-spacing: 0.3em;
+  color: var(--brown);
+  margin-top: 14px;
+  font-size: 0.8rem;
+}
+
+.legal-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 25px 120px;
+  line-height: 1.8;
+}
+
+.legal-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-top: 50px;
+  margin-bottom: 16px;
+}
+
+.legal-content p,
+.legal-content li {
+  color: var(--dark-brown);
+  font-size: 1rem;
+}
+
+.legal-content ul {
+  padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .legal-hero h1 { font-size: 2.2rem; }
+  .legal-content { padding: 60px 22px 80px; }
+}
+.last-updated {
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brown);
+  margin-bottom: 40px;
+}
+/* MATCHED TO HOMEPAGE HERO FADE-IN */
+.legal-content section {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.legal-content section.reveal {
+  animation: legalFadeIn 1.5s ease forwards;
+}
+
+@keyframes legalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

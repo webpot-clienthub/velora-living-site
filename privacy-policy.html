@@ -1,0 +1,173 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Privacy Policy | Velora Living</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Privacy Policy for Velora Living – Spaces That Feel Alive">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="legal.css">
+</head>
+
+<body>
+
+
+    <section class="legal-hero">
+        <h1>Privacy Policy</h1>
+        <p>Spaces That Feel Alive</p>
+        <div class="last-updated"> <br>
+            Last Updated: <span id="lastUpdated"></span>
+        </div>
+
+    </section>
+
+    <section class="legal-content">
+        <section>
+            <h2>Introduction</h2>
+            <p>Velora Living ("we", "our", "us") is committed to protecting your privacy and ensuring transparency in
+                how personal information is collected, used, and safeguarded. This Privacy Policy explains our practices
+                when you interact with our website, products, and services.</p>
+        </section>
+
+
+        <section>
+            <h2>Information We Collect</h2>
+            <p>We may collect personal and non-personal information when you interact with our website.</p>
+            <ul>
+                <li><strong>Personal Information:</strong> Name, phone number, email address, shipping address, and
+                    inquiry details.</li>
+                <li><strong>Communication Data:</strong> Messages sent via contact forms, WhatsApp, Instagram, or email.
+                </li>
+                <li><strong>Technical Information:</strong> IP address, browser type, device type, and usage data.</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h2>How We Use Your Information</h2>
+            <ul>
+                <li>To respond to inquiries and provide customer support</li>
+                <li>To process orders and custom requests</li>
+                <li>To improve website functionality and user experience</li>
+                <li>To communicate updates, promotions, or service information</li>
+                <li>To ensure security and prevent misuse</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h2>Legal Basis for Processing</h2>
+            <p>We process personal data based on user consent, contractual necessity, legal obligations, and legitimate
+                business interests.</p>
+        </section>
+
+
+        <section>
+            <h2>Information Sharing</h2>
+            <p>We do not sell, rent, or trade your personal information. Data may be shared only with trusted service
+                providers or when legally required.</p>
+        </section>
+
+
+        <section>
+            <h2>Data Security</h2>
+            <p>We implement appropriate technical and organizational measures to protect your information against
+                unauthorized access, alteration, or disclosure.</p>
+        </section>
+
+
+        <section>
+            <h2>Data Retention</h2>
+            <p>Personal information is retained only for as long as necessary to fulfill business, legal, or contractual
+                purposes.</p>
+        </section>
+
+
+        <section>
+            <h2>Your Rights</h2>
+            <ul>
+                <li>Right to access your personal data</li>
+                <li>Right to correction or deletion</li>
+                <li>Right to withdraw consent</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h2>Cookies & Tracking</h2>
+            <p>Cookies may be used to enhance user experience and analyze traffic. You may disable cookies via browser
+                settings.</p>
+        </section>
+
+
+        <section>
+            <h2>Children’s Privacy</h2>
+            <p>Velora Living does not knowingly collect data from individuals under the age of 13.</p>
+        </section>
+
+
+        <section>
+            <h2>Policy Updates</h2>
+            <p>This policy may be updated periodically. Continued use of the website indicates acceptance of changes.
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Contact Information</h2>
+            <p>Email: byveloraliving@gmail.com<br>Phone: +91 9510141167</p>
+        </section>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="velora-logo.png" class="footer-logo" alt="Velora Living">
+                <h3>Velora Living</h3>
+                <p>Space That Feels Alive</p>
+            </div>
+            <nav class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="https://wa.me/919510141167?text=Hello%20Velora,%20I%E2%80%99d%20love%20to%20connect%20with%20you%20regarding%20your%20products."
+                    target="_blank" rel="noopener">
+                    WhatsApp </a>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+                <a href="https://instagram.com/byveloraliving" target="_blank">Instagram</a>
+            </nav>
+        </div>
+    </footer>
+    <script>
+        const today = new Date();
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('lastUpdated').textContent =
+            today.toLocaleDateString('en-GB', options);
+        const sections = document.querySelectorAll('.legal-content section');
+
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
+
+        sections.forEach(section => observer.observe(section));
+
+
+    </script>
+
+</body>
+
+</html>
