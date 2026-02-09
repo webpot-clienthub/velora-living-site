@@ -42,6 +42,13 @@
     }
   </script>
 </head>
+<!-- FLOATING WHATSAPP BUTTON -->
+<a href="https://wa.me/919510141167" target="_blank" class="whatsapp-float"
+  aria-label="Chat with Velora Living on WhatsApp">
+  <span class="wa-text">Chat</span>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="wa-icon">
+</a>
+
 
 <body>
 
@@ -55,37 +62,145 @@
     </div>
   </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="brand-stack">
-      <img src="velora-logo.png" class="hero-logo" alt="Velora Living logo">
-      <h1 class="brand-name">Velora Living</h1>
-    </div>
+<!-- HERO -->
+<section class="hero">
 
-    <p class="slogan">
-      S&nbsp;P&nbsp;A&nbsp;C&nbsp;E&nbsp;&nbsp;T&nbsp;H&nbsp;A&nbsp;T&nbsp;&nbsp;F&nbsp;E&nbsp;E&nbsp;L&nbsp;S&nbsp;&nbsp;A&nbsp;L&nbsp;I&nbsp;V&nbsp;E
-    </p>
+  <!-- Promo Video -->
+  <div class="hero-video">
+    <video
+      src="velora-promo.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-label="Velora Living promotional video">
+    </video>
+  </div>
+
+  <!-- Brand -->
+  <div class="brand-stack">
+    <img src="velora-logo.png" class="hero-logo" alt="Velora Living logo">
+    <h1 class="brand-name">Velora Living</h1>
+  </div>
+
+  <p class="slogan">
+    S&nbsp;P&nbsp;A&nbsp;C&nbsp;E&nbsp;&nbsp;T&nbsp;H&nbsp;A&nbsp;T&nbsp;&nbsp;F&nbsp;E&nbsp;E&nbsp;L&nbsp;S&nbsp;&nbsp;A&nbsp;L&nbsp;I&nbsp;V&nbsp;E
+  </p>
+
+</section>
+
+
+    <div class="about-container">
+
+      <!-- LEFT CONTENT -->
+      <div class="about-text">
+        <h2>About Velora Living</h2>
+
+        <p>
+          Velora Living is a premium home living brand specializing in thoughtfully
+          crafted swings and furniture designed to elevate everyday spaces with
+          comfort, elegance, and balance.
+        </p>
+
+        <p>
+          We believe a swing is more than just a piece of furniture — it is a place
+          to pause, relax, and reconnect. Every Velora product is designed with a
+          deep focus on aesthetics, durability, and the way it feels in real living
+          spaces.
+        </p>
+
+        <p>
+          From modern indoor swings to outdoor and garden seating, our collections
+          are created to blend seamlessly with your home while offering lasting
+          comfort and timeless appeal.
+        </p>
+      </div>
+
+
+      <!-- RIGHT HIGHLIGHT CARD -->
+      <div class="about-highlight">
+        <h3>Why Choose Velora Living</h3>
+
+        <ul>
+          <li>Carefully crafted swings with premium materials</li>
+          <li>Designs that balance comfort, strength, and elegance</li>
+          <li>Suitable for indoor, outdoor, and garden spaces</li>
+          <li>Custom size and material options available</li>
+          <li>Dedicated support from selection to installation</li>
+        </ul>
+      </div>
+
+  </section>
+  <section class="about-modern section-padding">
+    <div class="about-container">
+      <div class="about-highlight">
+        <h3>The Velora Difference</h3>
+
+        <ul>
+          <li>Thoughtful designs made for everyday relaxation</li>
+          <li>Strong construction with premium finishes</li>
+          <li>Comfort-focused seating for all age groups</li>
+          <li>Versatile styles for indoor & outdoor spaces</li>
+          <li>Personal assistance from selection to delivery</li>
+        </ul>
+      </div>
+      <div class="about-text">
+        <h2>Crafted by Velora Living</h2>
+
+        <p>
+          Velora Living creates thoughtfully designed swings and seating solutions
+          that bring comfort, calm, and character into modern homes.
+        </p>
+
+        <p>
+          Our designs are inspired by the idea of slow living — spaces where you
+          can unwind, feel supported, and enjoy moments of pause. Every swing is
+          built to offer both visual harmony and everyday durability.
+        </p>
+
+        <p>
+          Whether placed indoors, on balconies, or in garden spaces, Velora swings
+          are designed to blend naturally with your surroundings while becoming
+          a statement of comfort and style.
+        </p>
+      </div>
+
+
+
+    </div>
   </section>
 
-  <!-- ABOUT -->
-  <section class="about">
-    <div class="about-box">
-      <h3>What We Do</h3>
-      <p>Creating beautiful, functional, and sustainable home furnishings that enhance living spaces.</p>
-    </div>
-    <div class="about-box">
-      <h3>What We Provide</h3>
-      <p>Handcrafted furniture and decor that brings comfort and style to every home.</p>
-    </div>
-    <div class="about-box">
-      <h3>What We Aim</h3>
-      <p>To create spaces that are not only beautiful but also functional and sustainable.</p>
-    </div>
-    <div class="about-box">
-      <h3>What We Expect</h3>
-      <p>Customers to experience joy, comfort, and inspiration in their homes through our carefully curated designs.</p>
+
+
+  <!-- HOW TO ORDER (HIGHLIGHTED BOX) -->
+  <section class="how-to-order-wrapper section-padding">
+    <div class="how-to-order-box">
+
+      <h2 class="how-title">How to Order</h2>
+
+      <div class="steps">
+        <div class="step" role="button" tabindex="0"
+          onclick="document.querySelector('.products').scrollIntoView({behavior:'smooth'})">
+          <span class="step-number">01</span>
+          <p>Choose your design</p>
+        </div>
+
+        <div class="step" role="button" tabindex="0">
+          <span class="step-number">02</span>
+          <p>Select size &amp; material</p>
+        </div>
+
+        <div class="step" role="button" tabindex="0" onclick="window.open('https://wa.me/919510141167','_blank')">
+          <span class="step-number">03</span>
+          <p>Connect on WhatsApp</p>
+        </div>
+      </div>
+
     </div>
   </section>
+
+
 
   <!-- PRODUCTS -->
   <section class="products">
@@ -111,10 +226,14 @@
       <div class="footer-brand">
         <img src="velora-logo.png" class="footer-logo" alt="Velora Living">
         <h3>Velora Living</h3>
-        <p>Space That Feels Alive</p>
+        <p class="footer-tagline">
+          Crafted for spaces that deserve to be felt.
+        </p>
       </div>
 
       <nav class="footer-links" aria-label="Footer links">
+
+
         <a href="https://wa.me/919510141167?text=Hello%20Velora,%20I%E2%80%99d%20love%20to%20connect%20with%20you%20regarding%20your%20products."
           target="_blank" rel="noopener">
           WhatsApp
@@ -185,7 +304,7 @@
 
             products = data;
             break;
-          } catch (_) {}
+          } catch (_) { }
         }
 
         if (!products) {
