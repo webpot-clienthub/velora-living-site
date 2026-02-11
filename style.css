@@ -423,6 +423,34 @@ body {
     line-height: 1.7;
   }
 
+  .category-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+  }
+
+  .view-all-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(74, 59, 42, 0.16);
+    color: var(--dark-brown);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  .view-all-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.10);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
   .carousel {
     position: relative;
   }

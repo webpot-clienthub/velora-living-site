@@ -405,6 +405,18 @@
           categorySection.appendChild(header);
           categorySection.appendChild(carousel);
 
+          const actions = document.createElement('div');
+          actions.className = 'category-actions';
+
+          const viewAll = document.createElement('a');
+          viewAll.className = 'view-all-btn';
+          viewAll.href = `Gallery/${categoryId}.html`;
+          viewAll.textContent = 'View all';
+          viewAll.setAttribute('aria-label', `View all ${data.name} photos`);
+
+          actions.appendChild(viewAll);
+          categorySection.appendChild(actions);
+
           list.appendChild(categorySection);
         });
 
