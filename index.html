@@ -293,134 +293,161 @@
     let currentProduct = null;
     let selectedSize = null;
 
+    // Render products to the DOM
+    function renderProducts(products) {
+      const list = document.getElementById('products-list');
+      if (!list) return;
+      
+      list.innerHTML = '';
+
+      Object.entries(products).forEach(([categoryId, data]) => {
+        if (!data || !Array.isArray(data.images) || data.images.length === 0) return;
+
+        const categorySection = document.createElement('section');
+        categorySection.className = 'category';
+        categorySection.dataset.category = categoryId;
+
+        const header = document.createElement('div');
+        header.className = 'category-header';
+
+        const title = document.createElement('h2');
+        title.textContent = data.name;
+
+        const desc = document.createElement('p');
+        desc.textContent = productDescriptions[categoryId] || '';
+
+        header.appendChild(title);
+        header.appendChild(desc);
+
+        const carousel = document.createElement('div');
+        carousel.className = 'carousel';
+        carousel.setAttribute('aria-label', `${data.name} gallery`);
+
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = 'carousel-btn prev';
+        prevBtn.setAttribute('aria-label', `Previous ${data.name} images`);
+        prevBtn.innerHTML = '&#8249;';
+        prevBtn.dataset.carouselPrev = 'true';
+
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'carousel-btn next';
+        nextBtn.setAttribute('aria-label', `Next ${data.name} images`);
+        nextBtn.innerHTML = '&#8250;';
+        nextBtn.dataset.carouselNext = 'true';
+
+        const viewport = document.createElement('div');
+        viewport.className = 'carousel-viewport';
+        viewport.tabIndex = 0;
+
+        const track = document.createElement('div');
+        track.className = 'carousel-track';
+
+        data.images.forEach((imgPath, idx) => {
+          const slide = document.createElement('button');
+          slide.type = 'button';
+          slide.className = 'carousel-slide';
+          slide.dataset.category = categoryId;
+          slide.dataset.name = data.name;
+          slide.dataset.index = String(idx);
+          slide.setAttribute('aria-label', `${data.name} image ${idx + 1}`);
+
+          const img = document.createElement('img');
+          img.src = imgPath;
+          img.loading = 'lazy';
+          img.alt = data.name;
+
+          slide.appendChild(img);
+          slide.addEventListener('click', openZoom);
+          slide.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openZoom(e);
+            }
+          });
+
+          track.appendChild(slide);
+        });
+
+        viewport.appendChild(track);
+        carousel.appendChild(prevBtn);
+        carousel.appendChild(viewport);
+        carousel.appendChild(nextBtn);
+
+        categorySection.appendChild(header);
+        categorySection.appendChild(carousel);
+
+        const actions = document.createElement('div');
+        actions.className = 'category-actions';
+
+        const viewAll = document.createElement('a');
+        viewAll.className = 'view-all-btn';
+        viewAll.href = `Gallery/${categoryId}.html`;
+        viewAll.textContent = 'View all';
+        viewAll.setAttribute('aria-label', `View all ${data.name} photos`);
+
+        actions.appendChild(viewAll);
+        categorySection.appendChild(actions);
+
+        list.appendChild(categorySection);
+      });
+
+      setupCarousels();
+    }
+
     // Load products dynamically from admin data
     async function loadProductsUI() {
       try {
-        const sources = [
-          'admin/api/products.php',
-          'admin/data/products.json'
-        ];
-
-        let products = null;
-
-        for (const url of sources) {
-          try {
-            const response = await fetch(url, { cache: 'no-store' });
-            if (!response.ok) continue;
-            const data = await response.json();
-            if (!data || typeof data !== 'object') continue;
-
-            const hasAnyImages = Object.values(data).some((v) => Array.isArray(v?.images) && v.images.length > 0);
-            if (!hasAnyImages) continue;
-
-            products = data;
-            break;
-          } catch (_) { }
-        }
-
-        if (!products) {
-          console.warn('No products source available.');
-          return;
-        }
-
-        const list = document.getElementById('products-list');
-
-        list.innerHTML = '';
-
-        Object.entries(products).forEach(([categoryId, data]) => {
-          if (!data || !Array.isArray(data.images) || data.images.length === 0) return; // Skip empty categories
-
-          const categorySection = document.createElement('section');
-          categorySection.className = 'category';
-          categorySection.dataset.category = categoryId;
-
-          const header = document.createElement('div');
-          header.className = 'category-header';
-
-          const title = document.createElement('h2');
-          title.textContent = data.name;
-
-          const desc = document.createElement('p');
-          desc.textContent = productDescriptions[categoryId] || '';
-
-          header.appendChild(title);
-          header.appendChild(desc);
-
-          const carousel = document.createElement('div');
-          carousel.className = 'carousel';
-          carousel.setAttribute('aria-label', `${data.name} gallery`);
-
-          const prevBtn = document.createElement('button');
-          prevBtn.type = 'button';
-          prevBtn.className = 'carousel-btn prev';
-          prevBtn.setAttribute('aria-label', `Previous ${data.name} images`);
-          prevBtn.innerHTML = '&#8249;';
-          prevBtn.dataset.carouselPrev = 'true';
-
-          const nextBtn = document.createElement('button');
-          nextBtn.type = 'button';
-          nextBtn.className = 'carousel-btn next';
-          nextBtn.setAttribute('aria-label', `Next ${data.name} images`);
-          nextBtn.innerHTML = '&#8250;';
-          nextBtn.dataset.carouselNext = 'true';
-
-          const viewport = document.createElement('div');
-          viewport.className = 'carousel-viewport';
-          viewport.tabIndex = 0;
-
-          const track = document.createElement('div');
-          track.className = 'carousel-track';
-
-          data.images.forEach((imgPath, idx) => {
-            const slide = document.createElement('button');
-            slide.type = 'button';
-            slide.className = 'carousel-slide';
-            slide.dataset.category = categoryId;
-            slide.dataset.name = data.name;
-            slide.dataset.index = String(idx);
-            slide.setAttribute('aria-label', `${data.name} image ${idx + 1}`);
-
-            const img = document.createElement('img');
-            img.src = imgPath;
-            img.loading = 'lazy';
-            img.alt = data.name;
-
-            slide.appendChild(img);
-            slide.addEventListener('click', openZoom);
-            slide.addEventListener('keydown', (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openZoom(e);
-              }
-            });
-
-            track.appendChild(slide);
+        // Always try products.php first - it dynamically scans velora_product directory
+        // Adding timestamp to bypass any caching
+        const timestamp = Date.now();
+        const productsUrl = `admin/api/products.php?t=${timestamp}`;
+        
+        try {
+          const response = await fetch(productsUrl, { 
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-store, no-cache, must-revalidate',
+              'Pragma': 'no-cache'
+            }
           });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+              const hasAnyImages = Object.values(data).some((v) => Array.isArray(v?.images) && v.images.length > 0);
+              if (hasAnyImages) {
+                console.log('Products loaded dynamically from products.php');
+                renderProducts(data);
+                return;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to load from products.php:', err);
+        }
 
-          viewport.appendChild(track);
-          carousel.appendChild(prevBtn);
-          carousel.appendChild(viewport);
-          carousel.appendChild(nextBtn);
+        // Fallback to products.json if products.php fails
+        try {
+          const fallbackUrl = `admin/data/products.json?t=${timestamp}`;
+          const response = await fetch(fallbackUrl, { cache: 'no-store' });
+          if (response.ok) {
+            const data = await response.json();
+            if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+              const hasAnyImages = Object.values(data).some((v) => Array.isArray(v?.images) && v.images.length > 0);
+              if (hasAnyImages) {
+                console.log('Products loaded from fallback products.json');
+                renderProducts(data);
+                return;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to load from products.json:', err);
+        }
 
-          categorySection.appendChild(header);
-          categorySection.appendChild(carousel);
-
-          const actions = document.createElement('div');
-          actions.className = 'category-actions';
-
-          const viewAll = document.createElement('a');
-          viewAll.className = 'view-all-btn';
-          viewAll.href = `Gallery/${categoryId}.html`;
-          viewAll.textContent = 'View all';
-          viewAll.setAttribute('aria-label', `View all ${data.name} photos`);
-
-          actions.appendChild(viewAll);
-          categorySection.appendChild(actions);
-
-          list.appendChild(categorySection);
-        });
-
-        setupCarousels();
+        console.warn('No products source available.');
 
       } catch (error) {
         console.error('Failed to load products:', error);

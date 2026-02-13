@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 header('Content-Type: application/json');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 $productsPath = __DIR__ . '/../data/products.json';
 $productRoot = realpath(__DIR__ . '/../../velora_product');
@@ -19,6 +21,10 @@ function slugify(string $name): string {
     return $slug ?: 'category';
 }
 
+/**
+ * Scan the velora_product directory and build product data from actual files.
+ * This ensures products.json is always in sync with the filesystem.
+ */
 function scanProducts(string $productRoot, string $siteRoot): array {
     $data = [];
     $dirs = array_filter(glob($productRoot . '/*'), 'is_dir');
@@ -43,14 +49,13 @@ function scanProducts(string $productRoot, string $siteRoot): array {
             $images[] = str_replace(DIRECTORY_SEPARATOR, '/', $rel);
         }
 
-        if (count($images) === 0) {
-            continue; // don't show empty folders
+        // Include categories with at least one image
+        if (count($images) > 0) {
+            $data[$key] = [
+                'name' => $name,
+                'images' => $images
+            ];
         }
-
-        $data[$key] = [
-            'name' => $name,
-            'images' => $images
-        ];
     }
 
     return $data;
@@ -73,17 +78,26 @@ function writeJson(string $path, array $data): void {
 $siteRoot = realpath(__DIR__ . '/../..');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Always do a fresh scan of the velora_product directory
+    // This ensures new images added to storage are properly reflected
     $data = scanProducts($productRoot, $siteRoot);
 
-    // If nothing found in velora_product, keep the existing products.json as-is.
-    if (count($data) === 0) {
-        $existing = readJson($productsPath);
+    // If directories with images are found, update products.json and return the data
+    if (count($data) > 0) {
+        writeJson($productsPath, $data);
+        echo json_encode($data);
+        exit;
+    }
+
+    // If no products found in velora_product, try to return existing products.json
+    $existing = readJson($productsPath);
+    if (count($existing) > 0) {
         echo json_encode($existing);
         exit;
     }
 
-    writeJson($productsPath, $data);
-    echo json_encode($data);
+    // Return empty object if nothing found
+    echo json_encode((object)[]);
     exit;
 }
 
