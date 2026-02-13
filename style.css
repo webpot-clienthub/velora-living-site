@@ -58,11 +58,11 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   animation: fadeIn 1.5s ease;
   margin-top: 0px;
-  padding-top: 0px;
+  padding-top: 6px;
 }
 /* HERO VIDEO */
 .hero-video {
@@ -78,22 +78,38 @@ body {
   width: 100%;
   height: auto;
   object-fit: contain;
+  display: block;
   border-radius: 16px;
   pointer-events: none; /* prevents accidental taps */
 }
 
-/* Mobile optimization */
-@media (max-width: 768px) {
+/* Desktop video layout (keep current behavior) */
+@media (min-width: 769px) {
   .hero-video {
-    max-width: 280px;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 24px;
+  }
+
+  .hero-video video {
+    border-radius: 16px;
   }
 }
 
-/* Ultra-small devices */
-@media (max-width: 480px) {
+/* Mobile video layout */
+@media (max-width: 768px) {
   .hero-video {
-    max-width: 240px;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .hero-video video {
+    border-radius: 0;
+  }
+
+  .hero {
+    padding-top: 6px;
   }
 }
 
@@ -911,7 +927,7 @@ body {
 
     /* HERO */
     .hero {
-      padding-top: 70px;
+      padding-top: 6px;
       padding-bottom: 70px;
     }
 
