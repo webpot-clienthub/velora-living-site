@@ -6,39 +6,50 @@
   <title>Velora Living | Space That Feels Alive</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Velora Living creates beautiful, functional, and sustainable home furnishings, crafted to make every space feel alive.">
-  <meta name="robots" content="index,follow">
+    content="Velora Living creates beautiful, functional, and sustainable home furnishings crafted to make every space feel alive.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="theme-color" content="#f7f4ef">
-
+  <link rel="canonical" href="/">
   <!-- Open Graph / Social -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Velora Living | Space That Feels Alive">
   <meta property="og:description"
-    content="Beautiful, functional, and sustainable home furnishings, crafted to make every space feel alive.">
+    content="Beautiful, functional, and sustainable home furnishings crafted to make every space feel alive.">
   <meta property="og:image" content="/velora-logo.png">
+  <meta property="og:url" content="/">
   <meta property="og:site_name" content="Velora Living">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Velora Living | Space That Feels Alive">
   <meta name="twitter:description"
-    content="Beautiful, functional, and sustainable home furnishings, crafted to make every space feel alive.">
+    content="Beautiful, functional, and sustainable home furnishings crafted to make every space feel alive.">
   <meta name="twitter:image" content="/velora-logo.png">
-
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&family=Quattrocento+Sans:wght@400;700&display=swap"
     rel="stylesheet">
-
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="/velora-logo.png">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Velora Living",
-      "logo": "/velora-logo.png"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Velora Living",
+          "logo": "/velora-logo.png",
+          "sameAs": [
+            "https://instagram.com/byveloraliving"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "name": "Velora Living",
+          "url": "/"
+        }
+      ]
     }
   </script>
 </head>
@@ -48,12 +59,20 @@
 
   <!-- LOADER -->
   <div id="loader" class="loader">
-    <div class="content">
-      <div class="loading"></div>
-      <div class="loading"></div>
-      <div class="loading"></div>
-      <div class="loading"></div>
+    <div class="loading">
+      <div class="loading-text" aria-label="Loading">
+        <span class="loading-text-words">L</span>
+        <span class="loading-text-words">O</span>
+        <span class="loading-text-words">A</span>
+        <span class="loading-text-words">D</span>
+        <span class="loading-text-words">I</span>
+        <span class="loading-text-words">N</span>
+        <span class="loading-text-words">G</span>
+      </div>
     </div>
+    <p id="loader-slow-message" class="loader-slow-message" role="status" aria-live="polite">
+      Your Internet Might be slow... Please wait......
+    </p>
   </div>
 
 <!-- HERO -->
@@ -292,6 +311,7 @@
 
     let currentProduct = null;
     let selectedSize = null;
+    let slowLoaderMessageTimer = null;
 
     // Render products to the DOM
     function renderProducts(products) {
@@ -355,7 +375,7 @@
 
           const img = document.createElement('img');
           img.src = imgPath;
-          img.loading = 'lazy';
+          img.loading = 'eager';
           img.alt = data.name;
 
           slide.appendChild(img);
@@ -537,6 +557,104 @@
       selectedSize = null;
     }
 
+    function hideLoader() {
+      const loader = document.getElementById('loader');
+      const slowMessage = document.getElementById('loader-slow-message');
+
+      if (slowLoaderMessageTimer) {
+        clearTimeout(slowLoaderMessageTimer);
+        slowLoaderMessageTimer = null;
+      }
+
+      if (slowMessage) {
+        slowMessage.classList.remove('visible');
+      }
+
+      if (!loader) return;
+      loader.classList.add('hidden');
+    }
+
+    function startLoaderSlowMessageTimer() {
+      const loader = document.getElementById('loader');
+      const slowMessage = document.getElementById('loader-slow-message');
+      if (!loader || !slowMessage) return;
+
+      slowMessage.classList.remove('visible');
+
+      slowLoaderMessageTimer = window.setTimeout(() => {
+        if (!loader.classList.contains('hidden')) {
+          slowMessage.classList.add('visible');
+        }
+      }, 5000);
+    }
+
+    function waitForImage(img) {
+      if (!img) return Promise.resolve();
+      const rawSrc = img.getAttribute('src');
+      if (!rawSrc || !rawSrc.trim()) return Promise.resolve();
+      if (img.complete) return Promise.resolve();
+
+      return new Promise((resolve) => {
+        const done = () => resolve();
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+      });
+    }
+
+    function waitForVideo(video) {
+      if (!video) return Promise.resolve();
+
+      const hasSource = Boolean(
+        video.currentSrc ||
+        video.src ||
+        video.querySelector('source[src]')
+      );
+
+      if (!hasSource) return Promise.resolve();
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) return Promise.resolve();
+
+      if (video.preload === 'none') {
+        video.preload = 'auto';
+      }
+
+      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) {
+        try {
+          video.load();
+        } catch (err) {
+          // Ignore load() failures and continue waiting on events.
+        }
+      }
+
+      return new Promise((resolve) => {
+        const done = () => resolve();
+        video.addEventListener('loadeddata', done, { once: true });
+        video.addEventListener('canplaythrough', done, { once: true });
+        video.addEventListener('error', done, { once: true });
+      });
+    }
+
+    async function waitForAllMedia() {
+      const imageElements = Array.from(document.querySelectorAll('img[src]'));
+      const videoElements = Array.from(document.querySelectorAll('video'));
+
+      await Promise.all([
+        ...imageElements.map(waitForImage),
+        ...videoElements.map(waitForVideo)
+      ]);
+    }
+
+    async function initializePage() {
+      try {
+        startLoaderSlowMessageTimer();
+        await loadProductsUI();
+        await waitForAllMedia();
+      } catch (error) {
+        console.error('Initialization failed:', error);
+      } finally {
+        hideLoader();
+      }
+    }
+
     function setupCarousels() {
       const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -625,15 +743,8 @@
       });
     }
 
-    // Hide loader after page load
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden');
-      }, 1000); // Delay for smooth transition
-    });
-
-    // Load products on page load
-    document.addEventListener('DOMContentLoaded', loadProductsUI);
+    // Load products and keep loader visible until all media is loaded.
+    document.addEventListener('DOMContentLoaded', initializePage);
 
     // Close overlay on click outside or close button
     document.getElementById('overlay').addEventListener('click', (e) => {
@@ -646,3 +757,4 @@
 </body>
 
 </html>
+

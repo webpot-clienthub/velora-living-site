@@ -586,17 +586,14 @@ body {
     transform: translateY(-1px);
   }
 
-  /* LOADING ANIMATION */
+  /* LOADER (smooth.md template adapted to plain CSS) */
   .loader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--offwhite);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #000;
     z-index: 9999;
     transition: opacity 0.5s ease, visibility 0.5s ease;
   }
@@ -604,24 +601,91 @@ body {
   .loader.hidden {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
   }
 
-  .spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid var(--beige);
-    border-top: 4px solid var(--brown);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  .loader .loading {
+    position: absolute;
+    inset: 0;
   }
 
-  @keyframes spin {
+  .loader .loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .loader .loading-text-words {
+    display: inline-block;
+    margin: 0 5px;
+    color: #fff;
+    font-family: "Quattrocento Sans", "Inter", sans-serif;
+    font-size: clamp(1.2rem, 2.8vw, 2rem);
+    letter-spacing: 0.22em;
+    animation: blur-text 1.5s infinite linear alternate;
+  }
+
+  .loader .loading-text-words:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .loader .loading-text-words:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .loader .loading-text-words:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .loader .loading-text-words:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+
+  .loader .loading-text-words:nth-child(5) {
+    animation-delay: 0.8s;
+  }
+
+  .loader .loading-text-words:nth-child(6) {
+    animation-delay: 1s;
+  }
+
+  .loader .loading-text-words:nth-child(7) {
+    animation-delay: 1.2s;
+  }
+
+  .loader-slow-message {
+    position: absolute;
+    left: 50%;
+    bottom: 22%;
+    transform: translateX(-50%);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: "Inter", sans-serif;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    letter-spacing: 0.04em;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .loader-slow-message.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @keyframes blur-text {
     0% {
-      transform: rotate(0deg);
+      filter: blur(0px);
     }
 
     100% {
-      transform: rotate(360deg);
+      filter: blur(4px);
     }
   }
 
@@ -841,144 +905,6 @@ body {
     display: none;
   }
 
-  /* LOADER */
-  :root {
-    --sp: 2.5s;
-    /* change speed */
-  }
-
-  .loader {
-    background: radial-gradient(#222, #101010);
-  }
-
-  .loader .content {
-    width: 50vmin;
-    height: 50vmin;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: scale(0.65);
-    animation: spin-all calc(var(--sp) * 2) linear 0s infinite
-  }
-
-  .loader .circle {
-    --in: 80%;
-    --ar: #ff9800;
-    --dt: #ffea34;
-    --shadow: drop-shadow(0vmin 0vmin 0.5vmin #000) drop-shadow(0vmin 1vmin 0.5vmin #0004);
-    --cross: linear-gradient(0deg, #fff0 calc(50% - 2px), #000 calc(50% - 1px) calc(50% + 1px), #fff0 calc(50% + 2px)), linear-gradient(90deg, #fff0 calc(50% - 2px), #000 calc(50% - 1px) calc(50% + 1px), #fff0 calc(50% + 2px));
-    border: 6vmin solid var(--ar);
-    width: var(--in);
-    height: var(--in);
-    border-radius: 100%;
-    position: absolute;
-    box-sizing: border-box;
-    border-top-color: #fff0;
-    border-left-color: #fff0;
-    top: 15vmin;
-    right: -10vmin;
-    animation: spin-bot var(--sp) ease 0s infinite;
-    background-image: var(--cross), radial-gradient(var(--dt) 5.5vmin, #fff0 calc(5.5vmin + 1px));
-    background-repeat: no-repeat;
-    background-size: 3vmin 1vmin, 1vmin 3vmin, 100% 100%;
-    background-position: center center;
-    filter: var(--shadow);
-  }
-
-  .loader .circle:nth-child(2) {
-    --in: 60%;
-    top: -2vmin;
-    animation: spin-top var(--sp) ease 0s infinite;
-    transform: rotate(-45deg);
-    background-image: var(--cross), radial-gradient(var(--dt) 1.25vmin, #fff0 calc(1.25vmin + 1px));
-    right: -4vmin;
-    filter: hue-rotate(10deg) var(--shadow);
-    background-size: 1.4vmin 1vmin, 1vmin 1.4vmin, 100% 100%;
-  }
-
-  .loader .circle:nth-child(3) {
-    --in: 100%;
-    top: -5vmin;
-    left: -13vmin;
-    transform: rotate(175deg);
-    animation: spin-left var(--sp) ease calc(var(--sp) / 4) infinite;
-    background-image: var(--cross), radial-gradient(var(--dt) 9vmin, #fff0 calc(9vmin + 1px));
-    filter: hue-rotate(20deg) var(--shadow);
-    background-size: 5vmin 1vmin, 1vmin 5vmin, 100% 100%;
-  }
-
-  .loader .circle:nth-child(4) {
-    --in: 60%;
-    top: 35vmin;
-    left: -6vmin;
-    transform: rotate(-280deg);
-    animation: spin-last var(--sp) ease calc(calc(calc(var(--sp) / 4) + var(--sp)) * -1) infinite;
-    background-image: var(--cross), radial-gradient(var(--dt) 2.5vmin, #fff0 calc(2.5vmin + 1px));
-    filter: hue-rotate(30deg) var(--shadow);
-    background-size: 2vmin 1vmin, 1vmin 2vmin, 100% 100%;
-  }
-
-
-  @keyframes spin-all {
-    0% {
-      transform: rotate(0deg) scale(0.65);
-    }
-
-    100% {
-      transform: rotate(360deg) scale(0.65);
-    }
-  }
-
-
-  @keyframes spin-top {
-    0% {
-      transform: rotate(-45deg);
-    }
-
-    100% {
-      transform: rotate(315deg);
-    }
-  }
-
-  @keyframes spin-bot {
-
-    0%,
-    35% {
-      transform: rotate(0deg);
-    }
-
-    80%,
-    100% {
-      transform: rotate(-360deg);
-    }
-  }
-
-  @keyframes spin-left {
-
-    0%,
-    35% {
-      transform: rotate(175deg);
-    }
-
-    80%,
-    100% {
-      transform: rotate(535deg);
-    }
-  }
-
-  @keyframes spin-last {
-
-    0%,
-    10% {
-      transform: rotate(-280deg);
-    }
-
-    90%,
-    100% {
-      transform: rotate(-640deg);
-    }
-  }
 
   /* iPhone specific optimization */
   @media only screen and (max-width: 430px) {
