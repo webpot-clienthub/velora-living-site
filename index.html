@@ -727,8 +727,8 @@
         };
 
         prev.addEventListener('click', () => scrollByStep(-1));
-        next.addEventListener('click', () => scrollByStep(1));
-        viewport.addEventListener('scroll', updateButtons, { passive: true });
+       next.addEventListener('click', () => scrollByStep(1));
+       viewport.addEventListener('scroll', updateButtons, { passive: true });
         window.addEventListener('resize', updateButtons);
 
         updateButtons();
