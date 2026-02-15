@@ -315,6 +315,7 @@
     const MEDIA_WAIT_TIMEOUT_MS = 15000;
     const ALL_MEDIA_WAIT_TIMEOUT_MS = 30000;
     const FETCH_TIMEOUT_MS = 10000;
+    const normalizeCategoryKey = (value) => String(value || '').replace(/^\d+-/, '');
 
     function waitWithTimeout(promise, timeoutMs) {
       return Promise.race([
@@ -358,7 +359,8 @@
         title.textContent = data.name;
 
         const desc = document.createElement('p');
-        desc.textContent = productDescriptions[categoryId] || '';
+        const normalizedCategoryId = normalizeCategoryKey(categoryId);
+        desc.textContent = productDescriptions[normalizedCategoryId] || '';
 
         header.appendChild(title);
         header.appendChild(desc);
@@ -427,7 +429,7 @@
 
         const viewAll = document.createElement('a');
         viewAll.className = 'view-all-btn';
-        viewAll.href = `Gallery/${categoryId}.html`;
+        viewAll.href = `Gallery/${normalizedCategoryId}.html`;
         viewAll.textContent = 'View all';
         viewAll.setAttribute('aria-label', `View all ${data.name} photos`);
 
@@ -520,7 +522,7 @@
       sizeOpts.innerHTML = '';
       selectedSize = null;
 
-      const options = sizeOptions[currentProduct.category] || [];
+      const options = sizeOptions[normalizeCategoryKey(currentProduct.category)] || [];
       if (options.length === 0) {
         sizeOpts.style.display = 'none';
         return;

@@ -42,6 +42,20 @@
     return null;
   };
 
+  const normalizeCategoryKey = (value) => String(value || '').replace(/^\d+-/, '');
+
+  const resolveCategory = (products, requestedKey) => {
+    if (!products || typeof products !== 'object') return null;
+    if (products[requestedKey]) return products[requestedKey];
+
+    const normalizedRequested = normalizeCategoryKey(requestedKey);
+    const matchKey = Object.keys(products).find(
+      (key) => normalizeCategoryKey(key) === normalizedRequested
+    );
+
+    return matchKey ? products[matchKey] : null;
+  };
+
   const run = async () => {
     if (!gridEl) return;
 
@@ -53,7 +67,7 @@
     setEmpty('Loading…');
 
     const products = await loadProducts();
-    const category = products && products[categoryId] ? products[categoryId] : null;
+    const category = resolveCategory(products, categoryId);
 
     const name = (category && category.name) ? category.name : (fallbackName || categoryId);
     if (titleEl) titleEl.textContent = name;
