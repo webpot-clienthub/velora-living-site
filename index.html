@@ -93,7 +93,13 @@
 
   <!-- Brand -->
   <div class="brand-stack">
-    <img src="velora-logo.png" class="hero-logo" alt="Velora Living logo">
+    <img
+      src="velora-logo.png"
+      class="hero-logo"
+      alt="Velora Living logo"
+      data-brand-logo
+      data-logo-light="velora-logo.png"
+      data-logo-dark="velora-logo-dark.png">
     <h1 class="brand-name">Velora Living</h1>
   </div>
 
@@ -211,7 +217,7 @@
           <p>Select size &amp; material</p>
         </div>
 
-        <div class="step" role="button" tabindex="0" onclick="window.open('https://wa.me/919510141167','_blank')">
+        <div class="step" role="button" tabindex="0" data-whatsapp-step>
           <span class="step-number">03</span>
           <p>Connect on WhatsApp</p>
         </div>
@@ -373,7 +379,13 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <img src="velora-logo.png" class="footer-logo" alt="Velora Living">
+        <img
+          src="velora-logo.png"
+          class="footer-logo"
+          alt="Velora Living"
+          data-brand-logo
+          data-logo-light="velora-logo.png"
+          data-logo-dark="velora-logo-dark.png">
         <h3>Velora Living</h3>
         <p class="footer-tagline">
           Crafted for spaces that deserve to be felt.
@@ -383,7 +395,10 @@
       <nav class="footer-links" aria-label="Footer links">
 
 
-        <a href="https://wa.me/919510141167?text=Hello%20Velora,%20I%E2%80%99d%20love%20to%20connect%20with%20you%20regarding%20your%20products."
+        <a
+          href="https://wa.me/919510141167?text=Hello%20Velora,%20I%E2%80%99d%20love%20to%20connect%20with%20you%20regarding%20your%20products."
+          data-whatsapp-link
+          data-whatsapp-prefilled
           target="_blank" rel="noopener">
           WhatsApp
         </a>
@@ -403,6 +418,8 @@
 
   <!-- FLOATING WHATSAPP BUTTON -->
   <a href="https://wa.me/919510141167" target="_blank" rel="noopener" class="whatsapp-float"
+    data-whatsapp-link
+    data-track-chat-click
     aria-label="Chat with Velora Living on WhatsApp">
     <span class="wa-text">Chat</span>
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="wa-icon">
@@ -448,7 +465,17 @@
     const MEDIA_WAIT_TIMEOUT_MS = 15000;
     const ALL_MEDIA_WAIT_TIMEOUT_MS = 30000;
     const FETCH_TIMEOUT_MS = 10000;
+    const SETTINGS_ENDPOINT = 'admin/api/settings.php';
+    const CHAT_TRACK_ENDPOINT = 'admin/api/analytics_track.php';
     const THEME_STORAGE_KEY = 'velora-theme';
+    const DEFAULT_SITE_SETTINGS = {
+      whatsappNumber: '+91 95101 41167',
+      defaultTheme: 'light',
+      trackChatClicks: true
+    };
+    const DEFAULT_WHATSAPP_MESSAGE = "Hello Velora, I'd love to connect with you regarding your products.";
+    const DEFAULT_WHATSAPP_DIGITS = '919510141167';
+    let siteSettings = { ...DEFAULT_SITE_SETTINGS };
     const normalizeCategoryKey = (value) => String(value || '').replace(/^\d+-/, '');
 
     function getStoredTheme() {
@@ -467,10 +494,133 @@
       }
     }
 
+    function sanitizeWhatsAppDigits(value) {
+      const digits = String(value || '').replace(/\D/g, '');
+      return digits || DEFAULT_WHATSAPP_DIGITS;
+    }
+
+    function normalizeDefaultTheme(value) {
+      return value === 'dark' ? 'dark' : 'light';
+    }
+
+    function sanitizeSiteSettings(input) {
+      if (!input || typeof input !== 'object') {
+        return { ...DEFAULT_SITE_SETTINGS };
+      }
+
+      return {
+        whatsappNumber: String(input.whatsappNumber || DEFAULT_SITE_SETTINGS.whatsappNumber).trim() || DEFAULT_SITE_SETTINGS.whatsappNumber,
+        defaultTheme: normalizeDefaultTheme(input.defaultTheme),
+        trackChatClicks: Boolean(input.trackChatClicks)
+      };
+    }
+
+    function getWhatsAppDigits() {
+      return sanitizeWhatsAppDigits(siteSettings.whatsappNumber);
+    }
+
+    function buildWhatsAppUrl(phoneDigits, message) {
+      const base = `https://wa.me/${phoneDigits}`;
+      if (!message) return base;
+      return `${base}?text=${encodeURIComponent(message)}`;
+    }
+
+    function applyBrandLogos(isDark) {
+      document.querySelectorAll('[data-brand-logo]').forEach((logo) => {
+        const lightSrc = logo.getAttribute('data-logo-light');
+        const darkSrc = logo.getAttribute('data-logo-dark');
+        if (!lightSrc || !darkSrc) return;
+        logo.src = isDark ? darkSrc : lightSrc;
+      });
+    }
+
+    function applyWhatsAppLinks() {
+      const phoneDigits = getWhatsAppDigits();
+
+      document.querySelectorAll('[data-whatsapp-link]').forEach((link) => {
+        const hasPrefilledMessage = link.hasAttribute('data-whatsapp-prefilled');
+        link.href = buildWhatsAppUrl(
+          phoneDigits,
+          hasPrefilledMessage ? DEFAULT_WHATSAPP_MESSAGE : ''
+        );
+      });
+    }
+
+    function applySiteSettings() {
+      applyWhatsAppLinks();
+    }
+
+    async function loadSiteSettings() {
+      try {
+        const url = `${SETTINGS_ENDPOINT}?t=${Date.now()}`;
+        const response = await fetchWithTimeout(url, { cache: 'no-store' });
+        if (!response.ok) return;
+
+        const data = await response.json();
+        siteSettings = sanitizeSiteSettings(data);
+      } catch (error) {
+        siteSettings = { ...DEFAULT_SITE_SETTINGS };
+      } finally {
+        applySiteSettings();
+      }
+    }
+
+    function trackChatButtonClick() {
+      if (!siteSettings.trackChatClicks) {
+        return;
+      }
+
+      const payload = JSON.stringify({ source: 'chat_button' });
+      try {
+        if (navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: 'application/json' });
+          navigator.sendBeacon(CHAT_TRACK_ENDPOINT, blob);
+          return;
+        }
+      } catch (error) {
+        // Fallback to fetch.
+      }
+
+      fetch(CHAT_TRACK_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: payload,
+        keepalive: true
+      }).catch(() => {
+        // Ignore analytics failures on client.
+      });
+    }
+
+    function setupWhatsAppActions() {
+      document.querySelectorAll('[data-track-chat-click]').forEach((el) => {
+        el.addEventListener('click', () => {
+          trackChatButtonClick();
+        });
+      });
+
+      const step = document.querySelector('[data-whatsapp-step]');
+      if (!step) return;
+
+      const openStepWhatsApp = () => {
+        window.open(buildWhatsAppUrl(getWhatsAppDigits(), ''), '_blank');
+      };
+
+      step.addEventListener('click', openStepWhatsApp);
+      step.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openStepWhatsApp();
+        }
+      });
+    }
+
     function applyTheme(theme) {
       const isDark = theme === 'dark';
       document.body.classList.toggle('theme-dark', isDark);
       document.body.dataset.theme = isDark ? 'dark' : 'light';
+      applyBrandLogos(isDark);
 
       const toggle = document.getElementById('theme-toggle');
       if (toggle) {
@@ -489,7 +639,11 @@
       if (!toggle) return;
 
       const storedTheme = getStoredTheme();
-      applyTheme(storedTheme === 'dark' ? 'dark' : 'light');
+      const defaultTheme = normalizeDefaultTheme(siteSettings.defaultTheme);
+      const initialTheme = storedTheme === 'dark' || storedTheme === 'light'
+        ? storedTheme
+        : defaultTheme;
+      applyTheme(initialTheme);
 
       toggle.addEventListener('click', () => {
         const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
@@ -749,7 +903,7 @@
       btn.classList.add('selected');
       selectedSize = size;
 
-      // Auto-open WhatsApp after size selection
+      // Auto-open WhatsApp after size selection.
       setTimeout(() => {
         openWhatsApp();
       }, 500);
@@ -776,7 +930,7 @@
       const imageId = currentProduct && currentProduct.src ? getImageIdFromSrc(currentProduct.src) : '';
       const productRef = imageId ? `ID: ${imageId}` : currentProduct.name;
       const message = `Hello Velora Living! I'm interested in ${productRef} in size ${selectedSize}.`;
-      const url = `https://wa.me/919408191506?text=${encodeURIComponent(message)}`;
+      const url = buildWhatsAppUrl(getWhatsAppDigits(), message);
       window.open(url, '_blank');
       closeOverlay();
     }
@@ -965,7 +1119,9 @@
 
     async function initializePage() {
       try {
+        await loadSiteSettings();
         setupThemeToggle();
+        setupWhatsAppActions();
         setupScrollReveals();
         startLoaderSlowMessageTimer();
         setupInteractiveTutorial();

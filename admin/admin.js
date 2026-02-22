@@ -1,26 +1,21 @@
-// Admin Panel Logic
-
-// Initialize authentication on page load
+// Admin Dashboard Logic
 document.addEventListener('DOMContentLoaded', async () => {
   if (window.AUTH && AUTH.requireAuth) {
     await AUTH.requireAuth();
   }
+
   initializeTheme();
   setupEventListeners();
 });
 
-// Initialize theme from localStorage
 function initializeTheme() {
   const savedTheme = localStorage.getItem('themeMode');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    updateThemeToggle('☀️');
-  }
+  const isDark = savedTheme === 'dark';
+  document.body.classList.toggle('dark-mode', isDark);
+  updateThemeToggle(isDark);
 }
 
-// Setup event listeners
 function setupEventListeners() {
-  // Theme toggle
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
     themeToggle.addEventListener('click', toggleTheme);
@@ -37,18 +32,15 @@ function setupEventListeners() {
   }
 }
 
-// Toggle theme between light and dark
 function toggleTheme() {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
   localStorage.setItem('themeMode', isDark ? 'dark' : 'light');
-  updateThemeToggle(isDark ? '☀️' : '🌙');
+  updateThemeToggle(isDark);
 }
 
-// Update theme toggle button text
-function updateThemeToggle(icon) {
+function updateThemeToggle(isDark) {
   const themeToggle = document.getElementById('theme-toggle');
-  if (themeToggle) {
-    themeToggle.textContent = icon;
-  }
+  if (!themeToggle) return;
+  themeToggle.textContent = isDark ? 'Sun' : 'Moon';
 }
