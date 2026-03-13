@@ -75,39 +75,48 @@
     </p>
   </div>
 
-<!-- HERO -->
-<section class="hero">
+  <!-- HERO -->
+  <section class="hero-video-section">
+    <div class="hero-overlay">
+      <div class="hero-logo-container">
+        <img
+          src="velora-logo.png"
+          class="hero-logo"
+          alt="Velora Living logo"
+          data-brand-logo
+          data-logo-light="velora-logo.png"
+          data-logo-dark="velora-logo-dark.png">
+      </div>
 
-  <!-- Promo Video -->
-  <div class="hero-video">
-    <video
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-      aria-label="Velora Living promotional video">
-      <source src="./velora-promo.mp4" type="video/mp4">
-    </video>
-  </div>
+      <div class="brand-stack">
+        <h1 class="brand-name">Velora Living</h1>
+        <p class="slogan">
+          SPACE THAT FEELS ALIVE
+        </p>
+      </div>
 
-  <!-- Brand -->
-  <div class="brand-stack">
-    <img
-      src="velora-logo.png"
-      class="hero-logo"
-      alt="Velora Living logo"
-      data-brand-logo
-      data-logo-light="velora-logo.png"
-      data-logo-dark="velora-logo-dark.png">
-    <h1 class="brand-name">Velora Living</h1>
-  </div>
-
-  <p class="slogan">
-    SPACE THAT FEELS ALIVE
-  </p>
-
-</section>
+      <div class="hero-video-frame">
+        <video
+          id="heroVideoA"
+          class="hero-video-layer is-active"
+          data-hero-video
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+          aria-label="Velora Living promotional video"></video>
+        <video
+          id="heroVideoB"
+          class="hero-video-layer"
+          data-hero-video
+          autoplay
+          muted
+          playsinline
+          preload="metadata"
+          aria-label="Velora Living promotional video"></video>
+      </div>
+    </div>
+  </section>
 
 
   <!-- ABOUT -->
@@ -426,6 +435,7 @@
   </a>
 
   <!-- JS -->
+  <script src="video-loader.js"></script>
   <script>
     document.documentElement.classList.add('js');
 
